@@ -1,6 +1,5 @@
-import React from 'react';
 import { Search, X } from 'lucide-react';
-import {popularSearches }from "./data"
+import { popularSearches } from './data';
 import {
   SearchSection,
   SearchHeader,

@@ -1,4 +1,3 @@
-import React from 'react';
 import CourseCard from '../CourseCard/cousreCard';
 import Pagination from '../Pagination/pagination';
 import { CoursesGrid, CoursesSection } from './styledComponents';
