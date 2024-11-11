@@ -6,6 +6,7 @@ import Header from './components/Header/header';
 import Sidebar from './components/Sidebar/sidebar';
 import Courses from './pages/Courses/courses';
 import Dashboard from './pages/Dashboard/dashboard';
+import Settings from './pages/Settings/settings';
 import { AppContainer, MainContent } from './styles/AppStyles';
 
 const theme = {
@@ -34,8 +35,9 @@ const App = () => {
           <Sidebar isOpen={isSidebarOpen} />
           <MainContent>
             <Routes>
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route exact path="/courses" element={<Courses />} />
+              <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route exact path="/settings" element={<Settings />} />
               {/* Add other routes as needed */}
             </Routes>
           </MainContent>
