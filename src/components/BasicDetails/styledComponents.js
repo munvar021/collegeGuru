@@ -9,7 +9,7 @@ export const FormWrapper = styled.div`
 `;
 
 export const FormContainer = styled.form`
- border: 1px solid #e5e7eb;
+  border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   padding: 1.5rem;
   background-color: #ffffff;
@@ -26,11 +26,12 @@ export const FormContainer = styled.form`
 `;
 
 export const FormTitle = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 2rem;
-  text-align: center;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
   
   @media (min-width: 768px) {
     text-align: left;

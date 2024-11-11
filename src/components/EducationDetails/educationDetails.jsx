@@ -33,6 +33,7 @@ const EducationDetails = () => {
       college: '',
       passingYear: '',
       degree: '',
+      graduationType: '',  // Now represents degree level
       marksType: '',
       percentage: ''
     }
@@ -121,7 +122,7 @@ const EducationDetails = () => {
     setTouched({
       class_x: { board: true, school: true, passingYear: true, marksType: true, percentage: true },
       class_xii: { board: true, school: true, passingYear: true, marksType: true, percentage: true },
-      graduation: { college: true, degree: true, passingYear: true, marksType: true, percentage: true }
+      graduation: { college: true, degree: true, graduationType: true, passingYear: true, marksType: true, percentage: true }
     });
 
     if (!hasErrors) {
@@ -183,6 +184,13 @@ const EducationDetails = () => {
     { value: 'cgpa', label: 'CGPA' }
   ];
 
+  const graduationTypeOptions = [
+    { value: 'undergraduate', label: 'Under Graduate' },
+    { value: 'postgraduate', label: 'Post Graduate' },
+    { value: 'doctorate', label: 'Doctorate' },
+    { value: 'diploma', label: 'Diploma' }
+  ];
+
   const yearOptions = years.map(year => ({ value: year.toString(), label: year.toString() }));
 
   return (
@@ -205,6 +213,7 @@ const EducationDetails = () => {
         ])}
 
         {renderEducationSection('Graduation Details', 'graduation', [
+          { name: 'graduationType', label: 'Degree Level', type: 'select', options: graduationTypeOptions },
           { name: 'college', label: 'College Name', type: 'text' },
           { name: 'degree', label: 'Degree', type: 'text' },
           { name: 'passingYear', label: 'Passing Year', type: 'select', options: yearOptions },
