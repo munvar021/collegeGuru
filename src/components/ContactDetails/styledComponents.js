@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const FormWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
   padding: 0rem 0.5rem;
