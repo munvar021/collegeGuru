@@ -2,11 +2,14 @@ import styled from 'styled-components';
 
 export const FormWrapper = styled.div`
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 0rem 0.5rem;
-//   background-color: #f3f4f6;
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 export const FormContainer = styled.form`
