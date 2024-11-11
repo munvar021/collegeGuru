@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FormContainer,
+  FormTitle,
   FormGroup,
   Input,
   Select,
@@ -104,6 +105,7 @@ const ContactDetails = () => {
   return (
     <FormWrapper>
       <FormContainer onSubmit={handleSubmit}>
+        <FormTitle>Contact Details</FormTitle>
         <FormGroup>
           <Label>Mobile Number</Label>
           <Input

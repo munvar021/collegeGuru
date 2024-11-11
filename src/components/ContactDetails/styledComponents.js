@@ -5,25 +5,42 @@ export const FormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 0rem 0.5rem;
 //   background-color: #f3f4f6;
 `;
 
 export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  justify-content: flex-start;
+  gap: 1rem;
   width: 100%;
   max-width: 600px;
-  padding: 2rem;
+  padding: 1rem;
   background-color: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
 
-  @media (max-width: 640px) {
-    padding: 1.5rem;
-    gap: 1rem;
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+`;
+
+export const FormTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  
+  @media (min-width: 768px) {
+    text-align: left;
   }
 `;
 
