@@ -1,4 +1,5 @@
 import React from 'react';
+import {boardOptions, marksTypeOptions, graduationTypeOptions} from './data';
 import {
   FormContainer,
   EducationSection,
@@ -33,7 +34,7 @@ const EducationDetails = () => {
       college: '',
       passingYear: '',
       degree: '',
-      graduationType: '',  // Now represents degree level
+      graduationType: '',
       marksType: '',
       percentage: ''
     }
@@ -51,18 +52,36 @@ const EducationDetails = () => {
     graduation: {}
   });
 
-  const validateField = (value, fieldName) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [submitStatus, setSubmitStatus] = React.useState('');
+  const [lastSaved, setLastSaved] = React.useState('');
+
+  const validateField = (value, fieldName, fieldType = 'text') => {
     if (!value.trim()) {
       return `${fieldName} is required`;
     }
-    if (fieldName === 'Percentage/CGPA') {
-      const numValue = parseFloat(value);
-      if (isNaN(numValue) || numValue < 0 || numValue > 100) {
-        return 'Please enter a valid percentage between 0 and 100';
-      }
+
+    switch (fieldType) {
+      case 'number':
+        const numValue = parseFloat(value);
+        if (isNaN(numValue) || numValue < 0 || numValue > 100) {
+          return 'Please enter a valid percentage between 0 and 100';
+        }
+        break;
+      case 'text':
+        if (value.length > 100) {
+          return `${fieldName} must be less than 100 characters`;
+        }
+        break;
+      default:
+        if (value.length > 100) {
+          return `${fieldName} must be less than 100 characters`;
+        }
+        break;
     }
     return '';
   };
+
 
   const handleChange = (section, field, value) => {
     setFormData(prev => ({
@@ -78,7 +97,7 @@ const EducationDetails = () => {
         ...prev,
         [section]: {
           ...prev[section],
-          [field]: validateField(value, field)
+          [field]: validateField(value, field, field === 'percentage' ? 'number' : 'text')
         }
       }));
     }
@@ -97,20 +116,23 @@ const EducationDetails = () => {
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: validateField(value, field)
+        [field]: validateField(value, field, field === 'percentage' ? 'number' : 'text')
       }
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = { class_x: {}, class_xii: {}, graduation: {} };
     let hasErrors = false;
 
-    // Validate all fields
     Object.keys(formData).forEach(section => {
       Object.keys(formData[section]).forEach(field => {
-        const error = validateField(formData[section][field], field);
+        const error = validateField(
+          formData[section][field], 
+          field,
+          field === 'percentage' ? 'number' : 'text'
+        );
         if (error) {
           newErrors[section][field] = error;
           hasErrors = true;
@@ -126,7 +148,22 @@ const EducationDetails = () => {
     });
 
     if (!hasErrors) {
-      console.log(formData);
+      setIsLoading(true);
+      setSubmitStatus('');
+      
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('Form Data Submitted:', formData);
+        
+        setSubmitStatus('success');
+        setLastSaved(new Date().toLocaleString());
+      } catch (error) {
+        console.error('Submission Error:', error);
+        setSubmitStatus('error');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -138,13 +175,15 @@ const EducationDetails = () => {
       <EducationGrid>
         {fields.map(field => (
           <FormGroup key={field.name}>
-            <Label>{field.label}</Label>
+            <Label htmlFor={`${section}-${field.name}`}>{field.label}</Label>
             {field.type === 'select' ? (
               <Select
+                id={`${section}-${field.name}`}
                 value={formData[section][field.name]}
                 onChange={(e) => handleChange(section, field.name, e.target.value)}
                 onBlur={(e) => handleBlur(section, field.name, e.target.value)}
                 $hasError={touched[section]?.[field.name] && errors[section]?.[field.name]}
+                aria-invalid={!!(touched[section]?.[field.name] && errors[section]?.[field.name])}
               >
                 <option value="">{`Select ${field.label}`}</option>
                 {field.options.map(option => (
@@ -155,41 +194,26 @@ const EducationDetails = () => {
               </Select>
             ) : (
               <Input
+                id={`${section}-${field.name}`}
                 type={field.type}
                 value={formData[section][field.name]}
                 onChange={(e) => handleChange(section, field.name, e.target.value)}
                 onBlur={(e) => handleBlur(section, field.name, e.target.value)}
                 placeholder={`Enter ${field.label.toLowerCase()}`}
                 $hasError={touched[section]?.[field.name] && errors[section]?.[field.name]}
+                aria-invalid={!!(touched[section]?.[field.name] && errors[section]?.[field.name])}
                 step={field.type === 'number' ? "0.01" : undefined}
+                maxLength={field.type === 'text' ? 100 : undefined}
               />
             )}
             {touched[section]?.[field.name] && errors[section]?.[field.name] && (
-              <ErrorMessage>{errors[section][field.name]}</ErrorMessage>
+              <ErrorMessage role="alert">{errors[section][field.name]}</ErrorMessage>
             )}
           </FormGroup>
         ))}
       </EducationGrid>
     </EducationSection>
   );
-
-  const boardOptions = [
-    { value: 'cbse', label: 'CBSE' },
-    { value: 'icse', label: 'ICSE' },
-    { value: 'state', label: 'State Board' }
-  ];
-
-  const marksTypeOptions = [
-    { value: 'percentage', label: 'Percentage' },
-    { value: 'cgpa', label: 'CGPA' }
-  ];
-
-  const graduationTypeOptions = [
-    { value: 'undergraduate', label: 'Under Graduate' },
-    { value: 'postgraduate', label: 'Post Graduate' },
-    { value: 'doctorate', label: 'Doctorate' },
-    { value: 'diploma', label: 'Diploma' }
-  ];
 
   const yearOptions = years.map(year => ({ value: year.toString(), label: year.toString() }));
 
@@ -221,9 +245,25 @@ const EducationDetails = () => {
           { name: 'percentage', label: 'Percentage/CGPA', type: 'number' }
         ])}
 
-        <SubmitButton type="submit">
-          Save Education Details
+        {submitStatus === 'success' && (
+          <div className="text-green-600 text-center mb-4" role="status">
+            Successfully saved education details!
+          </div>
+        )}
+
+        <SubmitButton 
+          type="submit" 
+          disabled={isLoading}
+          className={isLoading ? 'opacity-50 cursor-not-allowed' : ''}
+        >
+          {isLoading ? 'Saving...' : 'Save Education Details'}
         </SubmitButton>
+
+        {lastSaved && (
+          <div className="text-gray-600 text-sm text-center mt-2">
+            Last saved: {lastSaved}
+          </div>
+        )}
       </FormContainer>
     </FormWrapper>
   );

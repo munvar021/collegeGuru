@@ -1,76 +1,130 @@
 import React, { useState } from 'react';
-import BasicDetails from '../../components/BasicDetails/basicDetails';
-import ContactDetails from '../../components/ContactDetails/contactDetails';
-import EducationDetails from '../../components/EducationDetails/educationDetails';
-import Preferences from '../../components/Preferences/preferences';
-import { 
-  SettingsContainer, 
-  TabContainer, 
-  Tab, 
-  ContentWrapper,
-  PageTitle,
-  TabIcon,
-  TabText,
-  TabContent 
-} from './styledComponents';
-import { 
-  User, 
-  Phone, 
-  GraduationCap, 
-  Settings2 
-} from 'lucide-react';
+import { toast } from 'react-toastify';
+import { FormContainer, Section, Title, Subtitle, NotificationOptions, ToggleOption, ToggleLabel, ToggleSwitch, ErrorMessage, TextArea, SubmitButton } from './styledComponents';
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState('basic');
+  const [formData, setFormData] = useState({
+    email: false,
+    sms: false,
+    whatsapp: false,
+    concern: ''
+  });
 
-  const tabs = [
-    { id: 'basic', label: 'Basic Details', icon: User },
-    { id: 'contact', label: 'Contact Details', icon: Phone },
-    { id: 'education', label: 'Education Details', icon: GraduationCap },
-    { id: 'preferences', label: 'Preferences', icon: Settings2 }
-  ];
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const renderContent = () => {
-    switch(activeTab) {
-      case 'basic':
-        return <BasicDetails />;
-      case 'contact':
-        return <ContactDetails />;
-      case 'education':
-        return <EducationDetails />;
-      case 'preferences':
-        return <Preferences />;
-      default:
-        return <BasicDetails />;
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (formData.concern.trim() === '') {
+      newErrors.concern = 'Please describe your concern';
+    }
+    
+    if (!formData.email && !formData.sms && !formData.whatsapp) {
+      newErrors.notifications = 'Please select at least one notification method';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Simulated API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success('Form submitted successfully!');
+      setFormData({
+        email: false,
+        sms: false,
+        whatsapp: false,
+        concern: ''
+      });
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleToggle = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+    if (errors.notifications) {
+      setErrors(prev => ({
+        ...prev,
+        notifications: ''
+      }));
     }
   };
 
   return (
-    <SettingsContainer>
-      <PageTitle>Account Settings</PageTitle>
-      
-      <TabContainer>
-        {tabs.map(tab => (
-          <Tab
-            key={tab.id}
-            active={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={activeTab === tab.id ? 'active' : ''}
-          >
-            <TabIcon>
-              <tab.icon size={20} />
-            </TabIcon>
-            <TabText>{tab.label}</TabText>
-          </Tab>
-        ))}
-      </TabContainer>
+    <FormContainer>
+      <Section>
+        <Title>Notification & Reminders</Title>
+        <Subtitle>
+          Never miss important reminders & notifications about the latest education
+          news and your admission journey status
+        </Subtitle>
+        
+        <NotificationOptions>
+          <ToggleOption>
+            <ToggleLabel>Email</ToggleLabel>
+            <ToggleSwitch
+              checked={formData.email}
+              onChange={() => handleToggle('email')}
+            />
+          </ToggleOption>
+          
+          <ToggleOption>
+            <ToggleLabel>SMS</ToggleLabel>
+            <ToggleSwitch
+              checked={formData.sms}
+              onChange={() => handleToggle('sms')}
+            />
+          </ToggleOption>
+          
+          <ToggleOption>
+            <ToggleLabel>WhatsApp</ToggleLabel>
+            <ToggleSwitch
+              checked={formData.whatsapp}
+              onChange={() => handleToggle('whatsapp')}
+            />
+          </ToggleOption>
+        </NotificationOptions>
+        {errors.notifications && (
+          <ErrorMessage>{errors.notifications}</ErrorMessage>
+        )}
+      </Section>
 
-      <ContentWrapper>
-        <TabContent>
-          {renderContent()}
-        </TabContent>
-      </ContentWrapper>
-    </SettingsContainer>
+      <Section>
+        <Title>Report an Issue</Title>
+        <TextArea
+          placeholder="What is your concern?"
+          value={formData.concern}
+          onChange={(e) =>
+            setFormData(prev => ({ ...prev, concern: e.target.value }))
+          }
+          error={errors.concern}
+        />
+        {errors.concern && <ErrorMessage>{errors.concern}</ErrorMessage>}
+        
+        <SubmitButton 
+          onClick={handleSubmit}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Submitting...' : 'Submit'}
+        </SubmitButton>
+      </Section>
+    </FormContainer>
   );
 };
 

@@ -6,6 +6,7 @@ import Header from './components/Header/header';
 import Sidebar from './components/Sidebar/sidebar';
 import Courses from './pages/Courses/courses';
 import Dashboard from './pages/Dashboard/dashboard';
+import Profile from './pages/Profile/profile';
 import Settings from './pages/Settings/settings';
 import { AppContainer, MainContent } from './styles/AppStyles';
 
@@ -37,6 +38,7 @@ const App = () => {
             <Routes>
               <Route exact path="/courses" element={<Courses />} />
               <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route exact path="/profile" element={<Profile />} />
               <Route exact path="/settings" element={<Settings />} />
               {/* Add other routes as needed */}
             </Routes>

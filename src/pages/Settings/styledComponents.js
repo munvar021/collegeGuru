@@ -1,129 +1,171 @@
 import styled from 'styled-components';
 
-export const SettingsContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  background: #ffffff;
-  
-  @media (min-width: 640px) {
-    padding: 1.5rem;
-  }
-  
-  @media (min-width: 1024px) {
-    padding: 2rem;
-  }
-`;
-
-export const PageTitle = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  
-  @media (min-width: 640px) {
-    font-size: 1.875rem;
-  }
-  
-  @media (min-width: 1024px) {
-    font-size: 2.25rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-export const TabContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  
-  @media (min-width: 640px) {
-    flex-direction: row;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-export const Tab = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  width: 100%;
-  border: none;
-  background: ${props => props.active ? '#f3f4f6' : 'transparent'};
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  
-  @media (min-width: 640px) {
-    width: auto;
-    padding: 1rem 1.5rem;
-    border-radius: 0.5rem 0.5rem 0 0;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: ${props => props.active ? '#2563eb' : 'transparent'};
-      transition: all 0.2s ease;
-    }
-  }
+export const FormContainer = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 
   &:hover {
-    background: #f3f4f6;
-    
-    @media (min-width: 640px) {
-      background: ${props => props.active ? '#f3f4f6' : '#f8fafc'};
-    }
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    margin: 1rem;
   }
 `;
 
-export const TabIcon = styled.span`
+export const Section = styled.section`
+  margin-bottom: 2rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export const Title = styled.h2`
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+  font-weight: 600;
+`;
+
+export const Subtitle = styled.p`
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+`;
+
+export const NotificationOptions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const ToggleOption = styled.div`
   display: flex;
   align-items: center;
-  color: ${props => props.active ? '#2563eb' : '#64748b'};
-  transition: color 0.2s ease;
-  
-  ${Tab}:hover & {
-    color: #2563eb;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
   }
 `;
 
-export const TabText = styled.span`
-  font-size: 0.875rem;
+export const ToggleLabel = styled.span`
+  font-size: 1rem;
+  color: #333;
   font-weight: 500;
-  color: ${props => props.active ? '#2563eb' : '#64748b'};
-  transition: color 0.2s ease;
-  
-  @media (min-width: 640px) {
-    font-size: 1rem;
+`;
+
+export const ToggleSwitch = styled.input.attrs({ type: 'checkbox' })`
+  position: relative;
+  width: 50px;
+  height: 26px;
+  appearance: none;
+  background-color: #e4e4e4;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  outline: none;
+
+  &:checked {
+    background-color: #4c6fff;
   }
-  
-  ${Tab}:hover & {
-    color: #2563eb;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.3s;
+  }
+
+  &:checked::before {
+    transform: translateX(24px);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(76, 111, 255, 0.2);
   }
 `;
 
-export const ContentWrapper = styled.div`
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-`;
-
-export const TabContent = styled.div`
+export const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 120px;
   padding: 1rem;
-  
-  @media (min-width: 640px) {
-    padding: 1.5rem;
+  border: 2px solid ${props => props.error ? '#ff4d4d' : '#e4e4e4'};
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #4c6fff;
   }
-  
-  @media (min-width: 1024px) {
-    padding: 2rem;
+
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+export const ErrorMessage = styled.p`
+  color: #ff4d4d;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+export const SubmitButton = styled.button`
+  background-color: #4c6fff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  margin: 1.5rem auto 0;
+
+  &:hover:not(:disabled) {
+    background-color: #3651cc;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
   }
 `;

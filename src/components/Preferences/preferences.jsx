@@ -7,12 +7,16 @@ import {
   FormGroup,
   Label,
   Select,
-  ToggleContainer,
-  ToggleSwitch,
   Button,
   ButtonContainer,
   WarningText,
-  SelectWrapper
+  SelectWrapper,
+  FormContainer,
+  LoadingOverlay,
+  ErrorContainer,
+  SuccessContainer,
+  ValidationIcon,
+  HelperText
 } from './styledComponents';
 
 const Preferences = () => {
@@ -25,31 +29,25 @@ const Preferences = () => {
       interestedFields: '',
       admissionTimeline: ''
     },
-    notifications: {
-      email: true,
-      sms: true,
-      applicationUpdates: true,
-      promotionalOffers: false,
-      deadlineReminders: true,
-      documentRequests: true
-    },
     communication: {
       preferredLanguage: '',
       communicationMode: '',
       counselingPreference: '',
       responseTime: ''
-    },
-    accessibility: {
-      highContrast: false,
-      largeText: false,
-      screenReader: false,
-      colorBlindMode: false
     }
   });
 
   const [touched, setTouched] = useState({
     academic: {},
     communication: {}
+  });
+
+  const [formStatus, setFormStatus] = useState({
+    success: false,
+    error: false,
+    loading: false,
+    lastSaved: null,
+    message: ''
   });
 
   const handleChange = (category, field, value) => {
@@ -59,6 +57,12 @@ const Preferences = () => {
         ...prev[category],
         [field]: value
       }
+    }));
+    setFormStatus(prev => ({
+      ...prev,
+      success: false,
+      error: false,
+      message: ''
     }));
   };
 
@@ -72,10 +76,11 @@ const Preferences = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Mark all fields as touched
+    setFormStatus(prev => ({ ...prev, loading: true }));
+
     const newTouched = {
       academic: {
         courseType: true,
@@ -90,15 +95,56 @@ const Preferences = () => {
     };
     setTouched(newTouched);
 
-    // Check if required fields are filled
-    const academicEmpty = Object.values(preferences.academic).some(value => !value);
-    const communicationEmpty = Object.values(preferences.communication).some(value => !value);
+    const requiredFields = {
+      academic: ['courseType', 'studyMode', 'preferredLocation', 'budgetRange'],
+      communication: ['preferredLanguage', 'communicationMode']
+    };
+
+    const academicEmpty = requiredFields.academic.some(
+      field => !preferences.academic[field]
+    );
+    const communicationEmpty = requiredFields.communication.some(
+      field => !preferences.communication[field]
+    );
 
     if (academicEmpty || communicationEmpty) {
+      setFormStatus({
+        loading: false,
+        error: true,
+        success: false,
+        message: 'Please fill in all required fields'
+      });
+      console.log('Validation failed: Required fields are empty');
       return;
     }
 
-    console.log('Preferences saved:', preferences);
+    try {
+      // Simulating API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const timestamp = new Date().toLocaleString();
+      setFormStatus({
+        success: true,
+        error: false,
+        loading: false,
+        lastSaved: timestamp,
+        message: 'Preferences saved successfully!'
+      });
+
+      console.log('User Preferences Submitted:', {
+        academic: preferences.academic,
+        communication: preferences.communication,
+        timestamp,
+        status: 'Success'
+      });
+    } catch (error) {
+      setFormStatus({
+        success: false,
+        error: true,
+        loading: false,
+        message: 'Failed to save preferences. Please try again.'
+      });
+    }
   };
 
   const handleReset = () => {
@@ -111,31 +157,25 @@ const Preferences = () => {
         interestedFields: '',
         admissionTimeline: ''
       },
-      notifications: {
-        email: true,
-        sms: true,
-        applicationUpdates: true,
-        promotionalOffers: false,
-        deadlineReminders: true,
-        documentRequests: true
-      },
       communication: {
         preferredLanguage: '',
         communicationMode: '',
         counselingPreference: '',
         responseTime: ''
-      },
-      accessibility: {
-        highContrast: false,
-        largeText: false,
-        screenReader: false,
-        colorBlindMode: false
       }
     });
     setTouched({
       academic: {},
       communication: {}
     });
+    setFormStatus({
+      success: false,
+      error: false,
+      loading: false,
+      lastSaved: null,
+      message: ''
+    });
+    console.log('Form reset to default values');
   };
 
   const showWarning = (category, field) => {
@@ -144,238 +184,193 @@ const Preferences = () => {
 
   return (
     <PreferenceContainer>
-      <form onSubmit={handleSubmit}>
-        <PreferenceSection>
-          <SectionTitle>Academic Preferences</SectionTitle>
-          <PreferenceGrid>
-            <FormGroup>
-              <Label>Course Type</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.academic.courseType}
-                  onChange={(e) => handleChange('academic', 'courseType', e.target.value)}
-                  onBlur={() => handleBlur('academic', 'courseType')}
-                >
-                  <option value="">Select Course Type</option>
-                  <option value="undergraduate">Undergraduate</option>
-                  <option value="postgraduate">Postgraduate</option>
-                  <option value="diploma">Diploma</option>
-                  <option value="certification">Certification</option>
-                </Select>
-                {showWarning('academic', 'courseType') && (
-                  <WarningText>Please select a course type</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
+      <FormContainer>
+        <form onSubmit={handleSubmit}>
+          {formStatus.loading && (
+            <LoadingOverlay>
+              <div>Saving preferences...</div>
+            </LoadingOverlay>
+          )}
 
-            <FormGroup>
-              <Label>Study Mode</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.academic.studyMode}
-                  onChange={(e) => handleChange('academic', 'studyMode', e.target.value)}
-                  onBlur={() => handleBlur('academic', 'studyMode')}
-                >
-                  <option value="">Select Study Mode</option>
-                  <option value="fullTime">Full Time</option>
-                  <option value="partTime">Part Time</option>
-                  <option value="online">Online</option>
-                  <option value="hybrid">Hybrid</option>
-                </Select>
-                {showWarning('academic', 'studyMode') && (
-                  <WarningText>Please select a study mode</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
+          {formStatus.error && (
+            <ErrorContainer>
+              {formStatus.message}
+            </ErrorContainer>
+          )}
 
-            <FormGroup>
-              <Label>Preferred Location</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.academic.preferredLocation}
-                  onChange={(e) => handleChange('academic', 'preferredLocation', e.target.value)}
-                  onBlur={() => handleBlur('academic', 'preferredLocation')}
-                >
-                  <option value="">Select Location</option>
-                  <option value="local">Local</option>
-                  <option value="national">National</option>
-                  <option value="international">International</option>
-                </Select>
-                {showWarning('academic', 'preferredLocation') && (
-                  <WarningText>Please select a location</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
+          {formStatus.success && (
+            <SuccessContainer>
+              {formStatus.message}
+            </SuccessContainer>
+          )}
 
-            <FormGroup>
-              <Label>Budget Range</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.academic.budgetRange}
-                  onChange={(e) => handleChange('academic', 'budgetRange', e.target.value)}
-                  onBlur={() => handleBlur('academic', 'budgetRange')}
-                >
-                  <option value="">Select Budget Range</option>
-                  <option value="0-100000">Below 1 Lakh</option>
-                  <option value="100000-300000">1-3 Lakhs</option>
-                  <option value="300000-500000">3-5 Lakhs</option>
-                  <option value="500000+">Above 5 Lakhs</option>
-                </Select>
-                {showWarning('academic', 'budgetRange') && (
-                  <WarningText>Please select a budget range</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
-          </PreferenceGrid>
-        </PreferenceSection>
+          <PreferenceSection>
+            <SectionTitle>Academic Preferences</SectionTitle>
+            <PreferenceGrid>
+              <FormGroup>
+                <Label>Course Type</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.academic.courseType}
+                    onChange={(e) => handleChange('academic', 'courseType', e.target.value)}
+                    onBlur={() => handleBlur('academic', 'courseType')}
+                    hasError={showWarning('academic', 'courseType')}
+                  >
+                    <option value="">Select Course Type</option>
+                    <option value="undergraduate">Undergraduate</option>
+                    <option value="postgraduate">Postgraduate</option>
+                    <option value="diploma">Diploma</option>
+                    <option value="certification">Certification</option>
+                  </Select>
+                  {showWarning('academic', 'courseType') && (
+                    <WarningText>Please select a course type</WarningText>
+                  )}
+                  {preferences.academic.courseType && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
 
-        <PreferenceSection>
-          <SectionTitle>Communication Preferences</SectionTitle>
-          <PreferenceGrid>
-            <FormGroup>
-              <Label>Preferred Language</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.communication.preferredLanguage}
-                  onChange={(e) => handleChange('communication', 'preferredLanguage', e.target.value)}
-                  onBlur={() => handleBlur('communication', 'preferredLanguage')}
-                >
-                  <option value="">Select Language</option>
-                  <option value="english">English</option>
-                  <option value="hindi">Hindi</option>
-                  <option value="other">Other</option>
-                </Select>
-                {showWarning('communication', 'preferredLanguage') && (
-                  <WarningText>Please select a language</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
+              <FormGroup>
+                <Label>Study Mode</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.academic.studyMode}
+                    onChange={(e) => handleChange('academic', 'studyMode', e.target.value)}
+                    onBlur={() => handleBlur('academic', 'studyMode')}
+                    hasError={showWarning('academic', 'studyMode')}
+                  >
+                    <option value="">Select Study Mode</option>
+                    <option value="fullTime">Full Time</option>
+                    <option value="partTime">Part Time</option>
+                    <option value="online">Online</option>
+                    <option value="hybrid">Hybrid</option>
+                  </Select>
+                  {showWarning('academic', 'studyMode') && (
+                    <WarningText>Please select a study mode</WarningText>
+                  )}
+                  {preferences.academic.studyMode && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
 
-            <FormGroup>
-              <Label>Communication Mode</Label>
-              <SelectWrapper>
-                <Select
-                  value={preferences.communication.communicationMode}
-                  onChange={(e) => handleChange('communication', 'communicationMode', e.target.value)}
-                  onBlur={() => handleBlur('communication', 'communicationMode')}
-                >
-                  <option value="">Select Mode</option>
-                  <option value="email">Email</option>
-                  <option value="phone">Phone</option>
-                  <option value="chat">Chat</option>
-                </Select>
-                {showWarning('communication', 'communicationMode') && (
-                  <WarningText>Please select a communication mode</WarningText>
-                )}
-              </SelectWrapper>
-            </FormGroup>
-          </PreferenceGrid>
-        </PreferenceSection>
+              <FormGroup>
+                <Label>Preferred Location</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.academic.preferredLocation}
+                    onChange={(e) => handleChange('academic', 'preferredLocation', e.target.value)}
+                    onBlur={() => handleBlur('academic', 'preferredLocation')}
+                    hasError={showWarning('academic', 'preferredLocation')}
+                  >
+                    <option value="">Select Location</option>
+                    <option value="local">Local</option>
+                    <option value="national">National</option>
+                    <option value="international">International</option>
+                  </Select>
+                  {showWarning('academic', 'preferredLocation') && (
+                    <WarningText>Please select a location</WarningText>
+                  )}
+                  {preferences.academic.preferredLocation && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
 
-        {/* Rest of the sections remain unchanged */}
-        <PreferenceSection>
-          <SectionTitle>Notification Preferences</SectionTitle>
-          <PreferenceGrid>
-            <ToggleContainer>
-              <Label>Email Notifications</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.notifications.email}
-                  onChange={(e) => handleChange('notifications', 'email', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
+              <FormGroup>
+                <Label>Budget Range</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.academic.budgetRange}
+                    onChange={(e) => handleChange('academic', 'budgetRange', e.target.value)}
+                    onBlur={() => handleBlur('academic', 'budgetRange')}
+                    hasError={showWarning('academic', 'budgetRange')}
+                  >
+                    <option value="">Select Budget Range</option>
+                    <option value="0-100000">Below 1 Lakh</option>
+                    <option value="100000-300000">1-3 Lakhs</option>
+                    <option value="300000-500000">3-5 Lakhs</option>
+                    <option value="500000+">Above 5 Lakhs</option>
+                  </Select>
+                  {showWarning('academic', 'budgetRange') && (
+                    <WarningText>Please select a budget range</WarningText>
+                  )}
+                  {preferences.academic.budgetRange && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
+            </PreferenceGrid>
+          </PreferenceSection>
 
-            <ToggleContainer>
-              <Label>SMS Notifications</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.notifications.sms}
-                  onChange={(e) => handleChange('notifications', 'sms', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
+          <PreferenceSection>
+            <SectionTitle>Communication Preferences</SectionTitle>
+            <PreferenceGrid>
+              <FormGroup>
+                <Label>Preferred Language</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.communication.preferredLanguage}
+                    onChange={(e) => handleChange('communication', 'preferredLanguage', e.target.value)}
+                    onBlur={() => handleBlur('communication', 'preferredLanguage')}
+                    hasError={showWarning('communication', 'preferredLanguage')}
+                  >
+                    <option value="">Select Language</option>
+                    <option value="english">English</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="other">Other</option>
+                  </Select>
+                  {showWarning('communication', 'preferredLanguage') && (
+                    <WarningText>Please select a language</WarningText>
+                  )}
+                  {preferences.communication.preferredLanguage && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
 
-            <ToggleContainer>
-              <Label>Application Updates</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.notifications.applicationUpdates}
-                  onChange={(e) => handleChange('notifications', 'applicationUpdates', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
+              <FormGroup>
+                <Label>Communication Mode</Label>
+                <SelectWrapper>
+                  <Select
+                    value={preferences.communication.communicationMode}
+                    onChange={(e) => handleChange('communication', 'communicationMode', e.target.value)}
+                    onBlur={() => handleBlur('communication', 'communicationMode')}
+                    hasError={showWarning('communication', 'communicationMode')}
+                  >
+                    <option value="">Select Mode</option>
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                    <option value="chat">Chat</option>
+                  </Select>
+                  {showWarning('communication', 'communicationMode') && (
+                    <WarningText>Please select a communication mode</WarningText>
+                  )}
+                  {preferences.communication.communicationMode && (
+                    <ValidationIcon isValid={true}>✓</ValidationIcon>
+                  )}
+                </SelectWrapper>
+              </FormGroup>
+            </PreferenceGrid>
+          </PreferenceSection>
 
-            <ToggleContainer>
-              <Label>Promotional Offers</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.notifications.promotionalOffers}
-                  onChange={(e) => handleChange('notifications', 'promotionalOffers', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
-          </PreferenceGrid>
-        </PreferenceSection>
+          <ButtonContainer>
+            <Button type="button" onClick={handleReset}>
+              Reset Preferences
+            </Button>
+            <Button type="submit" disabled={formStatus.loading}>
+              {formStatus.loading ? 'Saving...' : 'Save Preferences'}
+            </Button>
+          </ButtonContainer>
 
-        <PreferenceSection>
-          <SectionTitle>Accessibility Preferences</SectionTitle>
-          <PreferenceGrid>
-            <ToggleContainer>
-              <Label>High Contrast Mode</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.accessibility.highContrast}
-                  onChange={(e) => handleChange('accessibility', 'highContrast', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
-
-            <ToggleContainer>
-              <Label>Large Text</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.accessibility.largeText}
-                  onChange={(e) => handleChange('accessibility', 'largeText', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
-
-            <ToggleContainer>
-              <Label>Screen Reader Support</Label>
-              <ToggleSwitch>
-                <input
-                  type="checkbox"
-                  checked={preferences.accessibility.screenReader}
-                  onChange={(e) => handleChange('accessibility', 'screenReader', e.target.checked)}
-                />
-                <span />
-              </ToggleSwitch>
-            </ToggleContainer>
-          </PreferenceGrid>
-        </PreferenceSection>
-
-        <ButtonContainer>
-          <Button type="button" onClick={handleReset}>
-            Reset Preferences
-          </Button>
-          <Button type="submit">
-            Save Preferences
-          </Button>
-        </ButtonContainer>
-      </form>
+          {formStatus.lastSaved && (
+            <HelperText>
+              Last saved: {formStatus.lastSaved}
+            </HelperText>
+          )}
+        </form>
+      </FormContainer>
     </PreferenceContainer>
   );
 };
