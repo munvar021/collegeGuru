@@ -68,12 +68,14 @@ const Header = ({ toggleSidebar }) => {
         </IconButton>
         {searchVisible && (
           <SearchPopup>
-            <SearchBar type="text" placeholder="Search..." />
+            <SearchBar type="search" placeholder="Search..."  />
           </SearchPopup>
         )}
-        <IconButton onClick={toggleSidebar}>
-          <FaUser />
-        </IconButton>
+        <Link to="/profile">
+          <IconButton>
+            <FaUser />
+          </IconButton>
+        </Link>
         <IconButton>
           <FaShoppingCart />
           <CartCount>0</CartCount>

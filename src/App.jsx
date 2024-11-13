@@ -5,6 +5,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import Header from './components/Header/header';
 import Sidebar from './components/Sidebar/sidebar';
 import Courses from './pages/Courses/courses';
+import ExamDashboard from './pages/ExamDashboard/examDashboard';
 import Dashboard from './pages/Dashboard/dashboard';
 import Profile from './pages/Profile/profile';
 import Settings from './pages/Settings/settings';
@@ -37,6 +38,7 @@ const App = () => {
           <MainContent>
             <Routes>
               <Route exact path="/courses" element={<Courses />} />
+              <Route exact path="/exam" element={<ExamDashboard />} />
               <Route exact path="/dashboard" element={<Dashboard />} />
               <Route exact path="/profile" element={<Profile />} />
               <Route exact path="/settings" element={<Settings />} />

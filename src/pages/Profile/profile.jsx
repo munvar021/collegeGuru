@@ -8,7 +8,7 @@ import {
   TabContainer, 
   Tab, 
   ContentWrapper,
-  PageTitle,
+  // PageTitle,
   TabIcon,
   TabText,
   TabContent 
@@ -47,7 +47,7 @@ const Profile = () => {
 
   return (
     <ProfileContainer>
-      <PageTitle>Account Settings</PageTitle>
+      {/* <PageTitle>Profile Settings</PageTitle> */}
       
       <TabContainer>
         {tabs.map(tab => (

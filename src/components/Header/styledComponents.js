@@ -145,10 +145,10 @@ export const CartCount = styled.span`
 `;
 
 export const SearchBar = styled.input`
-  padding: 0.5rem;
+  padding: 0.25rem;
   border: none;
   border-radius: 4px;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   transition: width 0.3s ease;
   
   &:focus {
