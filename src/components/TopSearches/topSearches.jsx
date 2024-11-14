@@ -1,17 +1,17 @@
-import { Search, X } from 'lucide-react';
-import { popularSearches } from './data';
+import { Search, X } from "lucide-react";
+import { popularSearches } from "./data";
 import {
   SearchSection,
   SearchHeader,
   SearchBubbles,
   SearchBubble,
-  ClearButton
-} from './styledComponents';
+  ClearButton,
+} from "./styledComponents";
 
 const TopSearches = ({ onSearchSelect, selectedSearch }) => {
   const handleBubbleClick = (search) => {
     if (selectedSearch === search) {
-      onSearchSelect('');
+      onSearchSelect("");
     } else {
       onSearchSelect(search);
     }
@@ -25,7 +25,7 @@ const TopSearches = ({ onSearchSelect, selectedSearch }) => {
           <h2>Popular Searches</h2>
         </div>
         {selectedSearch && (
-          <ClearButton onClick={() => onSearchSelect('')}>
+          <ClearButton onClick={() => onSearchSelect("")}>
             <X size={16} />
             Clear Search
           </ClearButton>
@@ -37,7 +37,7 @@ const TopSearches = ({ onSearchSelect, selectedSearch }) => {
           <SearchBubble
             key={search}
             onClick={() => handleBubbleClick(search)}
-            className={selectedSearch === search ? 'active' : ''}
+            className={selectedSearch === search ? "active" : ""}
           >
             {search}
           </SearchBubble>

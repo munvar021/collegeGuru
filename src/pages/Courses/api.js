@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = "http://localhost:8080";
 
 export const coursesApi = {
   fetchCourses: async ({
@@ -8,19 +8,19 @@ export const coursesApi = {
     limit = 10,
     duration = [],
     mode = [],
-    title = '',
+    title = "",
     minFees = 0,
-    maxFees = 100000
+    maxFees = 100000,
   } = {}) => {
     try {
       const params = {
         page,
         limit,
-        duration: duration.join(','),
-        mode: mode.join(','),
+        duration: duration.join(","),
+        mode: mode.join(","),
         title,
         minFees,
-        maxFees
+        maxFees,
       };
 
       const response = await axios.get(`${BASE_URL}/courses`, { params });
@@ -28,11 +28,11 @@ export const coursesApi = {
         data: response.data.data,
         pagination: {
           totalPages: response.data.pagination.totalPages,
-          total: response.data.pagination.total
-        }
+          total: response.data.pagination.total,
+        },
       };
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
     }
-  }
+  },
 };

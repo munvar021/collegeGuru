@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaBars, FaAngleDown } from 'react-icons/fa';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  FaSearch,
+  FaShoppingCart,
+  FaUser,
+  FaBars,
+  FaAngleDown,
+} from "react-icons/fa";
 import {
   HeaderContainer,
   Logo,
@@ -14,7 +20,7 @@ import {
   NavToggle,
   PopupNav,
   SearchPopup,
-} from './styledComponents';
+} from "./styledComponents";
 
 const Header = ({ toggleSidebar }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,8 +31,8 @@ const Header = ({ toggleSidebar }) => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleNav = () => {
@@ -51,7 +57,7 @@ const Header = ({ toggleSidebar }) => {
         <NavLink to="/updates">Latest Updates</NavLink>
       </Nav>
       <NavToggle onClick={toggleNav} navVisible={navVisible}>
-        <FaAngleDown className={navVisible ? 'rotate' : ''} />
+        <FaAngleDown className={navVisible ? "rotate" : ""} />
       </NavToggle>
       {navVisible && (
         <PopupNav>
@@ -68,7 +74,7 @@ const Header = ({ toggleSidebar }) => {
         </IconButton>
         {searchVisible && (
           <SearchPopup>
-            <SearchBar type="search" placeholder="Search..."  />
+            <SearchBar type="search" placeholder="Search..." />
           </SearchPopup>
         )}
         <Link to="/profile">

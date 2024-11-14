@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import TopSearches from '../../components/TopSearches/topSearches';
-import Filters from '../../components/Filters/filters';
-import CoursesList from '../../components/CoursesList/coursesList';
-import { coursesApi } from './api';
-import { CoursesContainer, ContentWrapper, LoadingSpinner, EmptyView } from './styledComponents';
+import React, { useState, useEffect } from "react";
+import TopSearches from "../../components/TopSearches/topSearches";
+import Filters from "../../components/CoursesFilters/coursesFilters";
+import CoursesList from "../../components/CoursesList/coursesList";
+import { coursesApi } from "./api";
+import {
+  CoursesContainer,
+  ContentWrapper,
+  LoadingSpinner,
+  EmptyView,
+} from "./styledComponents";
 
 const Courses = () => {
-  const [selectedSearch, setSelectedSearch] = useState('');
+  const [selectedSearch, setSelectedSearch] = useState("");
   const [filters, setFilters] = useState({
     duration: [],
     mode: [],
-    fees: { min: 0, max: 100000 }
+    fees: { min: 0, max: 100000 },
   });
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +23,7 @@ const Courses = () => {
     page: 1,
     limit: 10,
     totalPages: 1,
-    total: 0
+    total: 0,
   });
 
   useEffect(() => {
@@ -32,14 +37,14 @@ const Courses = () => {
           mode: filters.mode,
           title: selectedSearch,
           minFees: filters.fees.min,
-          maxFees: filters.fees.max
+          maxFees: filters.fees.max,
         });
 
         setCourses(result.data);
-        setPagination(prev => ({
+        setPagination((prev) => ({
           ...prev,
           totalPages: result.pagination.totalPages,
-          total: result.pagination.total
+          total: result.pagination.total,
         }));
       } catch (error) {
         console.error(error.message);
@@ -52,7 +57,7 @@ const Courses = () => {
   }, [filters, selectedSearch, pagination.page, pagination.limit]);
 
   const handlePageChange = (page) => {
-    setPagination(prev => ({ ...prev, page }));
+    setPagination((prev) => ({ ...prev, page }));
   };
 
   return (
@@ -62,10 +67,7 @@ const Courses = () => {
         selectedSearch={selectedSearch}
       />
       <ContentWrapper>
-        <Filters
-          filters={filters}
-          onFilterChange={setFilters}
-        />
+        <Filters filters={filters} onFilterChange={setFilters} />
         {loading ? (
           <LoadingSpinner>
             <div className="spinner"></div>

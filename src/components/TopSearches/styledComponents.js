@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const SearchSection = styled.div`
   background: white;
@@ -12,16 +12,16 @@ export const SearchHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  
+
   .header-content {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    
+
     svg {
       color: #4b5563;
     }
-    
+
     h2 {
       margin: 0;
       font-size: 1.25rem;
@@ -35,7 +35,7 @@ export const SearchBubbles = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  
+
   @media (max-width: 640px) {
     gap: 0.5rem;
   }
@@ -52,18 +52,18 @@ export const SearchBubble = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  
+
   &:hover {
     background: #e5e7eb;
     color: #1a1a1a;
   }
-  
+
   &.active {
     background: #eef2ff;
     border-color: #4f46e5;
     color: #4f46e5;
   }
-  
+
   @media (max-width: 640px) {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
@@ -83,11 +83,11 @@ export const ClearButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: #fecaca;
   }
-  
+
   svg {
     color: #991b1b;
   }

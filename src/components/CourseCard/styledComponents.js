@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Card = styled.div`
   background: white;
@@ -7,14 +7,14 @@ export const Card = styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   position: relative;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
   }
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -64,14 +64,14 @@ export const MetaInfo = styled.div`
   display: flex;
   gap: 1.5rem;
   margin-top: 0.5rem;
-  
+
   div {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: #6b7280;
     font-size: 0.9rem;
-    
+
     svg {
       color: #4b5563;
     }
@@ -91,12 +91,12 @@ export const RatingWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  
+
   .rating {
     font-weight: 600;
     color: #1a1a1a;
   }
-  
+
   .total-ratings {
     color: #6b7280;
     font-size: 0.85rem;
@@ -107,7 +107,7 @@ export const Price = styled.div`
   font-size: 1.5rem;
   font-weight: 700;
   color: #2563eb;
-  
+
   .currency {
     font-size: 1rem;
     font-weight: 600;

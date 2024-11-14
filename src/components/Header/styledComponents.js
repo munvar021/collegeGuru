@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const HeaderContainer = styled.header`
   display: flex;
@@ -12,7 +12,8 @@ export const HeaderContainer = styled.header`
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: ${props => props.scrolled ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'};
+  box-shadow: ${(props) =>
+    props.scrolled ? "0 2px 4px rgba(0,0,0,0.1)" : "none"};
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -60,7 +61,7 @@ export const NavLink = styled(Link)`
   }
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -103,7 +104,7 @@ export const PopupNav = styled.div`
   z-index: 999;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
+
   ${NavLink} {
     display: block;
     padding: 0.5rem 1rem;
@@ -150,7 +151,7 @@ export const SearchBar = styled.input`
   border-radius: 4px;
   margin-left: 0.5rem;
   transition: width 0.3s ease;
-  
+
   &:focus {
     outline: none;
     width: 200px;

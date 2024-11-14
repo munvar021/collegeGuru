@@ -1,4 +1,4 @@
-import {durations, modes} from './data';
+import { durations, modes } from "./data";
 import {
   FiltersContainer,
   FilterSection,
@@ -7,20 +7,20 @@ import {
   CheckboxLabel,
   RangeInputGroup,
   RangeInput,
-  RangeValues
-} from './styledComponents';
+  RangeValues,
+} from "./styledComponents";
 
 const Filters = ({ filters, onFilterChange }) => {
   const handleDurationChange = (duration) => {
     const newDurations = filters.duration.includes(duration)
-      ? filters.duration.filter(d => d !== duration)
+      ? filters.duration.filter((d) => d !== duration)
       : [...filters.duration, duration];
     onFilterChange({ ...filters, duration: newDurations });
   };
 
   const handleModeChange = (mode) => {
     const newModes = filters.mode.includes(mode)
-      ? filters.mode.filter(m => m !== mode)
+      ? filters.mode.filter((m) => m !== mode)
       : [...filters.mode, mode];
     onFilterChange({ ...filters, mode: newModes });
   };
@@ -28,7 +28,7 @@ const Filters = ({ filters, onFilterChange }) => {
   const handleFeesChange = (type, value) => {
     onFilterChange({
       ...filters,
-      fees: { ...filters.fees, [type]: parseInt(value) }
+      fees: { ...filters.fees, [type]: parseInt(value) },
     });
   };
 
@@ -37,7 +37,7 @@ const Filters = ({ filters, onFilterChange }) => {
       <FilterSection>
         <FilterTitle>Duration</FilterTitle>
         <CheckboxGroup>
-          {durations.map(duration => (
+          {durations.map((duration) => (
             <CheckboxLabel key={duration}>
               <input
                 type="checkbox"
@@ -53,7 +53,7 @@ const Filters = ({ filters, onFilterChange }) => {
       <FilterSection>
         <FilterTitle>Mode</FilterTitle>
         <CheckboxGroup>
-          {modes.map(mode => (
+          {modes.map((mode) => (
             <CheckboxLabel key={mode}>
               <input
                 type="checkbox"
@@ -75,7 +75,7 @@ const Filters = ({ filters, onFilterChange }) => {
             max="100000"
             step="1000"
             value={filters.fees.min}
-            onChange={(e) => handleFeesChange('min', e.target.value)}
+            onChange={(e) => handleFeesChange("min", e.target.value)}
           />
           <RangeInput
             type="range"
@@ -83,11 +83,11 @@ const Filters = ({ filters, onFilterChange }) => {
             max="100000"
             step="1000"
             value={filters.fees.max}
-            onChange={(e) => handleFeesChange('max', e.target.value)}
+            onChange={(e) => handleFeesChange("max", e.target.value)}
           />
           <RangeValues>
-            <span>₹{filters.fees.min.toLocaleString('en-IN')}</span>
-            <span>₹{filters.fees.max.toLocaleString('en-IN')}</span>
+            <span>₹{filters.fees.min.toLocaleString("en-IN")}</span>
+            <span>₹{filters.fees.max.toLocaleString("en-IN")}</span>
           </RangeValues>
         </RangeInputGroup>
       </FilterSection>

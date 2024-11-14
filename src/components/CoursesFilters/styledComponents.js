@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FiltersContainer = styled.aside`
   background: white;
@@ -6,7 +6,7 @@ export const FiltersContainer = styled.aside`
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   height: fit-content;
-  
+
   @media (max-width: 768px) {
     position: sticky;
     top: 1rem;
@@ -16,7 +16,7 @@ export const FiltersContainer = styled.aside`
 
 export const FilterSection = styled.div`
   margin-bottom: 2rem;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -41,7 +41,7 @@ export const CheckboxLabel = styled.label`
   gap: 0.5rem;
   color: #444;
   cursor: pointer;
-  
+
   input[type="checkbox"] {
     width: 16px;
     height: 16px;
@@ -58,7 +58,7 @@ export const RangeInputGroup = styled.div`
 export const RangeInput = styled.input`
   width: 100%;
   cursor: pointer;
-  
+
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;

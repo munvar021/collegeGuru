@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   FormContainer,
   FormGroup,
@@ -9,17 +9,17 @@ import {
   SubmitButton,
   FormTitle,
   FormWrapper,
-  FormGrid
-} from './styledComponents';
+  FormGrid,
+} from "./styledComponents";
 
 const BasicDetails = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    dateOfBirth: '',
-    gender: '',
-    socialCategory: '',
-    physicallyChallengd: 'no',
-    email: '',
+    name: "",
+    dateOfBirth: "",
+    gender: "",
+    socialCategory: "",
+    physicallyChallengd: "no",
+    email: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -28,47 +28,49 @@ const BasicDetails = () => {
   const [submitStatus, setSubmitStatus] = useState(null);
 
   const validateField = (name, value) => {
-    let error = '';
-    
-    if (!value || value.trim() === '') {
-      error = `${name.charAt(0).toUpperCase() + name.slice(1).replace(/([A-Z])/g, ' $1')} is required`;
+    let error = "";
+
+    if (!value || value.trim() === "") {
+      error = `${
+        name.charAt(0).toUpperCase() + name.slice(1).replace(/([A-Z])/g, " $1")
+      } is required`;
     } else {
       switch (name) {
-        case 'name':
+        case "name":
           if (value.length < 2) {
-            error = 'Name must be at least 2 characters long';
+            error = "Name must be at least 2 characters long";
           } else if (value.length > 50) {
-            error = 'Name cannot exceed 50 characters';
+            error = "Name cannot exceed 50 characters";
           } else if (!/^[a-zA-Z\s]*$/.test(value)) {
-            error = 'Name can only contain letters and spaces';
+            error = "Name can only contain letters and spaces";
           }
           break;
-        
-        case 'email':
+
+        case "email":
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            error = 'Please enter a valid email address';
+            error = "Please enter a valid email address";
           }
           break;
-        
-        case 'dateOfBirth':
+
+        case "dateOfBirth":
           const date = new Date(value);
           const today = new Date();
           if (date > today) {
-            error = 'Date of birth cannot be in the future';
+            error = "Date of birth cannot be in the future";
           }
           break;
-          
+
         default:
           break;
       }
     }
-    
+
     return error;
   };
 
   const validateForm = () => {
     const newErrors = {};
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) newErrors[key] = error;
     });
@@ -77,58 +79,60 @@ const BasicDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     if (touched[name]) {
       const error = validateField(name, value);
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: error
+        [name]: error,
       }));
     }
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
-      [name]: true
+      [name]: true,
     }));
-    
+
     const error = validateField(name, value);
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
   const simulateApiCall = async (data) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ success: true, message: 'Data saved successfully' });
+        resolve({ success: true, message: "Data saved successfully" });
       }, 1500);
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const newErrors = validateForm();
     setErrors(newErrors);
-    setTouched(Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+    setTouched(
+      Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+    );
 
     if (Object.keys(newErrors).length === 0) {
       setIsSubmitting(true);
-      
+
       try {
         await simulateApiCall(formData);
-        setSubmitStatus('success');
-        console.log('Form submitted successfully. Updated data:', formData);
+        setSubmitStatus("success");
+        console.log("Form submitted successfully. Updated data:", formData);
       } catch (error) {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       } finally {
         setIsSubmitting(false);
       }
@@ -137,9 +141,13 @@ const BasicDetails = () => {
 
   return (
     <FormWrapper>
-      <FormContainer onSubmit={handleSubmit} role="form" aria-label="Basic Details Form">
+      <FormContainer
+        onSubmit={handleSubmit}
+        role="form"
+        aria-label="Basic Details Form"
+      >
         <FormTitle>Basic Details</FormTitle>
-        
+
         <FormGrid>
           <FormGroup>
             <Label htmlFor="name">Full Name *</Label>
@@ -156,7 +164,9 @@ const BasicDetails = () => {
               aria-invalid={!!errors.name}
               maxLength={50}
             />
-            {touched.name && errors.name && <ErrorText role="alert">{errors.name}</ErrorText>}
+            {touched.name && errors.name && (
+              <ErrorText role="alert">{errors.name}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -173,7 +183,9 @@ const BasicDetails = () => {
               aria-required="true"
               aria-invalid={!!errors.email}
             />
-            {touched.email && errors.email && <ErrorText role="alert">{errors.email}</ErrorText>}
+            {touched.email && errors.email && (
+              <ErrorText role="alert">{errors.email}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -188,9 +200,11 @@ const BasicDetails = () => {
               $hasError={touched.dateOfBirth && errors.dateOfBirth}
               aria-required="true"
               aria-invalid={!!errors.dateOfBirth}
-              max={new Date().toISOString().split('T')[0]}
+              max={new Date().toISOString().split("T")[0]}
             />
-            {touched.dateOfBirth && errors.dateOfBirth && <ErrorText role="alert">{errors.dateOfBirth}</ErrorText>}
+            {touched.dateOfBirth && errors.dateOfBirth && (
+              <ErrorText role="alert">{errors.dateOfBirth}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -210,7 +224,9 @@ const BasicDetails = () => {
               <option value="female">Female</option>
               <option value="other">Other</option>
             </Select>
-            {touched.gender && errors.gender && <ErrorText role="alert">{errors.gender}</ErrorText>}
+            {touched.gender && errors.gender && (
+              <ErrorText role="alert">{errors.gender}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -231,9 +247,9 @@ const BasicDetails = () => {
               <option value="sc">SC</option>
               <option value="st">ST</option>
             </Select>
-            {touched.socialCategory && errors.socialCategory && 
+            {touched.socialCategory && errors.socialCategory && (
               <ErrorText role="alert">{errors.socialCategory}</ErrorText>
-            }
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -251,24 +267,24 @@ const BasicDetails = () => {
           </FormGroup>
         </FormGrid>
 
-        {submitStatus === 'success' && (
-          <div role="alert" style={{ color: '#059669', marginTop: '1rem' }}>
+        {submitStatus === "success" && (
+          <div role="alert" style={{ color: "#059669", marginTop: "1rem" }}>
             Form submitted successfully!
           </div>
         )}
 
-        {submitStatus === 'error' && (
-          <div role="alert" style={{ color: '#DC2626', marginTop: '1rem' }}>
+        {submitStatus === "error" && (
+          <div role="alert" style={{ color: "#DC2626", marginTop: "1rem" }}>
             An error occurred while submitting the form. Please try again.
           </div>
         )}
 
-        <SubmitButton 
-          type="submit" 
+        <SubmitButton
+          type="submit"
           disabled={isSubmitting}
           aria-disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving Changes...' : 'Save Changes'}
+          {isSubmitting ? "Saving Changes..." : "Save Changes"}
         </SubmitButton>
       </FormContainer>
     </FormWrapper>

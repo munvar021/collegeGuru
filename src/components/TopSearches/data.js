@@ -8,5 +8,5 @@ export const popularSearches = [
   "Data Science",
   "Cloud Computing",
   "Mobile Development",
-  "Algorithms"
+  "Algorithms",
 ];

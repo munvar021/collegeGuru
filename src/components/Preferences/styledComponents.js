@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const PreferenceContainer = styled.div`
   max-width: 1200px;
@@ -6,11 +6,13 @@ export const PreferenceContainer = styled.div`
   padding: 0 1rem;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
   @media (max-width: 768px) {
@@ -84,7 +86,7 @@ export const Select = styled.select`
   width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  border: 1px solid ${props => props.hasError ? '#ef4444' : '#d1d5db'};
+  border: 1px solid ${(props) => (props.hasError ? "#ef4444" : "#d1d5db")};
   background-color: #ffffff;
   font-size: 0.875rem;
   color: #111827;
@@ -130,8 +132,10 @@ export const Button = styled.button`
   font-weight: 500;
   font-size: 0.875rem;
   transition: all 0.2s ease;
-  
-  ${props => props.type === 'submit' ? `
+
+  ${(props) =>
+    props.type === "submit"
+      ? `
     background-color: #3b82f6;
     color: #ffffff;
     border: none;
@@ -144,7 +148,8 @@ export const Button = styled.button`
       background-color: #93c5fd;
       cursor: not-allowed;
     }
-  ` : `
+  `
+      : `
     background-color: #ffffff;
     color: #374151;
     border: 1px solid #d1d5db;
@@ -188,7 +193,7 @@ export const ValidationIcon = styled.span`
   right: 2.5rem;
   top: 50%;
   transform: translateY(-50%);
-  color: ${props => props.isValid ? '#10b981' : '#ef4444'};
+  color: ${(props) => (props.isValid ? "#10b981" : "#ef4444")};
   font-size: 1rem;
 `;
 

@@ -1,4 +1,4 @@
-import { Star, Clock, Award } from 'lucide-react';
+import { Star, Clock, Award } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -8,12 +8,13 @@ import {
   MetaInfo,
   RatingWrapper,
   Price,
-  StatsWrapper
-} from './styledComponents';
+  StatsWrapper,
+} from "./styledComponents";
 
 const CourseCard = ({ course }) => {
-  const averageRating = course.averageRating || 
-    (course.ratings.reduce((acc, curr) => acc + curr, 0) / course.ratings.length);
+  const averageRating =
+    course.averageRating ||
+    course.ratings.reduce((acc, curr) => acc + curr, 0) / course.ratings.length;
 
   return (
     <Card>
@@ -21,7 +22,7 @@ const CourseCard = ({ course }) => {
         <InfoBadge>Most Popular</InfoBadge>
         <Title>{course.title}</Title>
         <Description>{course.description}</Description>
-        
+
         <MetaInfo>
           <div className="duration">
             <Clock size={16} />
@@ -29,7 +30,7 @@ const CourseCard = ({ course }) => {
           </div>
           <div className="level">
             <Award size={16} />
-            {course.duration.includes('6') ? 'Advanced' : 'Beginner'}
+            {course.duration.includes("6") ? "Advanced" : "Beginner"}
           </div>
         </MetaInfo>
 
@@ -41,11 +42,13 @@ const CourseCard = ({ course }) => {
               color={averageRating >= 4.5 ? "#FFB800" : "#FFD700"}
             />
             <span className="rating">{averageRating.toFixed(1)}</span>
-            <span className="total-ratings">({course.ratings.length} ratings)</span>
+            <span className="total-ratings">
+              ({course.ratings.length} ratings)
+            </span>
           </RatingWrapper>
           <Price>
             <span className="currency">₹</span>
-            {course.fees.toLocaleString('en-IN')}
+            {course.fees.toLocaleString("en-IN")}
           </Price>
         </StatsWrapper>
       </CardContent>

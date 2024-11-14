@@ -1,6 +1,6 @@
-import CourseCard from '../CourseCard/cousreCard';
-import Pagination from '../Pagination/pagination';
-import { CoursesGrid, CoursesSection } from './styledComponents';
+import CourseCard from "../CourseCard/cousreCard";
+import Pagination from "../Pagination/pagination";
+import { CoursesGrid, CoursesSection } from "./styledComponents";
 
 const CoursesList = ({ courses, pagination, onPageChange }) => {
   return (

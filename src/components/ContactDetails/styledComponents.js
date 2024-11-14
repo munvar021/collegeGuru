@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FormWrapper = styled.div`
   display: flex;
@@ -6,7 +6,7 @@ export const FormWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  
+
   @media (max-width: 768px) {
     padding: 1rem;
   }
@@ -27,7 +27,8 @@ export const FormContainer = styled.form`
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 
   @media (max-width: 768px) {
@@ -42,7 +43,7 @@ export const FormTitle = styled.h2`
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid #e2e8f0;
-  
+
   @media (min-width: 768px) {
     text-align: left;
   }
@@ -68,7 +69,7 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   padding: 0.75rem;
-  border: 1px solid ${props => props.$hasError ? '#ef4444' : '#e5e7eb'};
+  border: 1px solid ${(props) => (props.$hasError ? "#ef4444" : "#e5e7eb")};
   border-radius: 0.375rem;
   font-size: 1rem;
   width: 100%;
@@ -76,14 +77,15 @@ export const Input = styled.input`
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: ${props => props.$hasError ? '#ef4444' : '#d1d5db'};
+    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#d1d5db")};
   }
 
   &:focus {
     outline: none;
-    border-color: ${props => props.$hasError ? '#ef4444' : '#2563eb'};
-    box-shadow: 0 0 0 3px ${props => 
-      props.$hasError ? 'rgba(239, 68, 68, 0.2)' : 'rgba(37, 99, 235, 0.2)'};
+    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#2563eb")};
+    box-shadow: 0 0 0 3px
+      ${(props) =>
+        props.$hasError ? "rgba(239, 68, 68, 0.2)" : "rgba(37, 99, 235, 0.2)"};
   }
 
   &::placeholder {
@@ -98,7 +100,7 @@ export const Input = styled.input`
 
 export const Select = styled.select`
   padding: 0.75rem;
-  border: 1px solid ${props => props.$hasError ? '#ef4444' : '#e5e7eb'};
+  border: 1px solid ${(props) => (props.$hasError ? "#ef4444" : "#e5e7eb")};
   border-radius: 0.375rem;
   font-size: 1rem;
   width: 100%;
@@ -107,14 +109,15 @@ export const Select = styled.select`
   cursor: pointer;
 
   &:hover {
-    border-color: ${props => props.$hasError ? '#ef4444' : '#d1d5db'};
+    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#d1d5db")};
   }
 
   &:focus {
     outline: none;
-    border-color: ${props => props.$hasError ? '#ef4444' : '#2563eb'};
-    box-shadow: 0 0 0 3px ${props => 
-      props.$hasError ? 'rgba(239, 68, 68, 0.2)' : 'rgba(37, 99, 235, 0.2)'};
+    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#2563eb")};
+    box-shadow: 0 0 0 3px
+      ${(props) =>
+        props.$hasError ? "rgba(239, 68, 68, 0.2)" : "rgba(37, 99, 235, 0.2)"};
   }
 
   @media (max-width: 640px) {

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const SidebarContainer = styled.aside`
   width: 280px;
@@ -15,7 +15,7 @@ export const SidebarContainer = styled.aside`
   z-index: 900;
 
   @media (max-width: 768px) {
-    transform: translateX(${props => props.isOpen ? '0' : '-100%'});
+    transform: translateX(${(props) => (props.isOpen ? "0" : "-100%")});
   }
 `;
 
@@ -27,7 +27,7 @@ export const ProfileSection = styled.div`
 export const Avatar = styled.div`
   width: 60px;
   height: 60px;
-  background: ${props => props.theme.colors.secondary};
+  background: ${(props) => props.theme.colors.secondary};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -41,17 +41,17 @@ export const Avatar = styled.div`
 export const UserInfo = styled.div`
   h3 {
     margin: 0 0 0.5rem 0;
-    color: ${props => props.theme.colors.text};
+    color: ${(props) => props.theme.colors.text};
     font-size: 1.2rem;
   }
 
   div {
     font-size: 0.9rem;
-    
+
     a {
-      color: ${props => props.theme.colors.secondary};
+      color: ${(props) => props.theme.colors.secondary};
       text-decoration: none;
-      
+
       &:hover {
         text-decoration: underline;
       }
@@ -73,8 +73,8 @@ export const NavItem = styled(Link)`
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  color: ${props => props.active ? props.theme.colors.secondary : '#666'};
-  background: ${props => props.active ? '#f8f7ff' : 'transparent'};
+  color: ${(props) => (props.active ? props.theme.colors.secondary : "#666")};
+  background: ${(props) => (props.active ? "#f8f7ff" : "transparent")};
   text-decoration: none;
   transition: all 0.2s ease;
 
@@ -84,6 +84,6 @@ export const NavItem = styled(Link)`
 
   &:hover {
     background: #f8f7ff;
-    color: ${props => props.theme.colors.secondary};
+    color: ${(props) => props.theme.colors.secondary};
   }
 `;

@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   CardContainer,
   CardHeader,
@@ -8,11 +9,16 @@ import {
 } from './styledComponents';
 
 const ExamCard = ({ examData }) => {
+  const handleSetAlert = useCallback(() => {
+    // Implement alert functionality
+    alert(`Alert set for ${examData.title}`);
+  }, [examData.title]);
+
   return (
     <CardContainer>
       <CardHeader>
         <CardTitle>{examData.title}</CardTitle>
-        <AlertButton>Set Exam Alert</AlertButton>
+        <AlertButton onClick={handleSetAlert}>Set Exam Alert</AlertButton>
       </CardHeader>
       <NavLinksContainer>
         {examData.links.map((link, index) => (

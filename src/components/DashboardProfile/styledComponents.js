@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const ProfileBanner = styled.div`
   background: #f5f7ff;
@@ -14,7 +14,7 @@ export const ProfileBanner = styled.div`
     flex-direction: column;
     text-align: center;
   }
-`
+`;
 
 export const ProgressCircle = styled.div`
   width: 150px;
@@ -24,9 +24,9 @@ export const ProgressCircle = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;
@@ -35,7 +35,7 @@ export const ProgressCircle = styled.div`
     border-top-color: #4c6fff;
     // transform: rotate(-45deg);
   }
-`
+`;
 
 export const CompleteProfileButton = styled.button`
   background: #4c6fff;
@@ -50,4 +50,4 @@ export const CompleteProfileButton = styled.button`
   &:hover {
     background: #3d5ce0;
   }
-`
+`;

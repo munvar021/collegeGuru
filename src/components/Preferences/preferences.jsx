@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   PreferenceContainer,
   PreferenceSection,
@@ -16,30 +16,30 @@ import {
   ErrorContainer,
   SuccessContainer,
   ValidationIcon,
-  HelperText
-} from './styledComponents';
+  HelperText,
+} from "./styledComponents";
 
 const Preferences = () => {
   const [preferences, setPreferences] = useState({
     academic: {
-      courseType: '',
-      studyMode: '',
-      preferredLocation: '',
-      budgetRange: '',
-      interestedFields: '',
-      admissionTimeline: ''
+      courseType: "",
+      studyMode: "",
+      preferredLocation: "",
+      budgetRange: "",
+      interestedFields: "",
+      admissionTimeline: "",
     },
     communication: {
-      preferredLanguage: '',
-      communicationMode: '',
-      counselingPreference: '',
-      responseTime: ''
-    }
+      preferredLanguage: "",
+      communicationMode: "",
+      counselingPreference: "",
+      responseTime: "",
+    },
   });
 
   const [touched, setTouched] = useState({
     academic: {},
-    communication: {}
+    communication: {},
   });
 
   const [formStatus, setFormStatus] = useState({
@@ -47,64 +47,64 @@ const Preferences = () => {
     error: false,
     loading: false,
     lastSaved: null,
-    message: ''
+    message: "",
   });
 
   const handleChange = (category, field, value) => {
-    setPreferences(prev => ({
+    setPreferences((prev) => ({
       ...prev,
       [category]: {
         ...prev[category],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
-    setFormStatus(prev => ({
+    setFormStatus((prev) => ({
       ...prev,
       success: false,
       error: false,
-      message: ''
+      message: "",
     }));
   };
 
   const handleBlur = (category, field) => {
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [category]: {
         ...prev[category],
-        [field]: true
-      }
+        [field]: true,
+      },
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    setFormStatus(prev => ({ ...prev, loading: true }));
+
+    setFormStatus((prev) => ({ ...prev, loading: true }));
 
     const newTouched = {
       academic: {
         courseType: true,
         studyMode: true,
         preferredLocation: true,
-        budgetRange: true
+        budgetRange: true,
       },
       communication: {
         preferredLanguage: true,
-        communicationMode: true
-      }
+        communicationMode: true,
+      },
     };
     setTouched(newTouched);
 
     const requiredFields = {
-      academic: ['courseType', 'studyMode', 'preferredLocation', 'budgetRange'],
-      communication: ['preferredLanguage', 'communicationMode']
+      academic: ["courseType", "studyMode", "preferredLocation", "budgetRange"],
+      communication: ["preferredLanguage", "communicationMode"],
     };
 
     const academicEmpty = requiredFields.academic.some(
-      field => !preferences.academic[field]
+      (field) => !preferences.academic[field]
     );
     const communicationEmpty = requiredFields.communication.some(
-      field => !preferences.communication[field]
+      (field) => !preferences.communication[field]
     );
 
     if (academicEmpty || communicationEmpty) {
@@ -112,37 +112,37 @@ const Preferences = () => {
         loading: false,
         error: true,
         success: false,
-        message: 'Please fill in all required fields'
+        message: "Please fill in all required fields",
       });
-      console.log('Validation failed: Required fields are empty');
+      console.log("Validation failed: Required fields are empty");
       return;
     }
 
     try {
       // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const timestamp = new Date().toLocaleString();
       setFormStatus({
         success: true,
         error: false,
         loading: false,
         lastSaved: timestamp,
-        message: 'Preferences saved successfully!'
+        message: "Preferences saved successfully!",
       });
 
-      console.log('User Preferences Submitted:', {
+      console.log("User Preferences Submitted:", {
         academic: preferences.academic,
         communication: preferences.communication,
         timestamp,
-        status: 'Success'
+        status: "Success",
       });
     } catch (error) {
       setFormStatus({
         success: false,
         error: true,
         loading: false,
-        message: 'Failed to save preferences. Please try again.'
+        message: "Failed to save preferences. Please try again.",
       });
     }
   };
@@ -150,32 +150,32 @@ const Preferences = () => {
   const handleReset = () => {
     setPreferences({
       academic: {
-        courseType: '',
-        studyMode: '',
-        preferredLocation: '',
-        budgetRange: '',
-        interestedFields: '',
-        admissionTimeline: ''
+        courseType: "",
+        studyMode: "",
+        preferredLocation: "",
+        budgetRange: "",
+        interestedFields: "",
+        admissionTimeline: "",
       },
       communication: {
-        preferredLanguage: '',
-        communicationMode: '',
-        counselingPreference: '',
-        responseTime: ''
-      }
+        preferredLanguage: "",
+        communicationMode: "",
+        counselingPreference: "",
+        responseTime: "",
+      },
     });
     setTouched({
       academic: {},
-      communication: {}
+      communication: {},
     });
     setFormStatus({
       success: false,
       error: false,
       loading: false,
       lastSaved: null,
-      message: ''
+      message: "",
     });
-    console.log('Form reset to default values');
+    console.log("Form reset to default values");
   };
 
   const showWarning = (category, field) => {
@@ -193,15 +193,11 @@ const Preferences = () => {
           )}
 
           {formStatus.error && (
-            <ErrorContainer>
-              {formStatus.message}
-            </ErrorContainer>
+            <ErrorContainer>{formStatus.message}</ErrorContainer>
           )}
 
           {formStatus.success && (
-            <SuccessContainer>
-              {formStatus.message}
-            </SuccessContainer>
+            <SuccessContainer>{formStatus.message}</SuccessContainer>
           )}
 
           <PreferenceSection>
@@ -212,9 +208,11 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.academic.courseType}
-                    onChange={(e) => handleChange('academic', 'courseType', e.target.value)}
-                    onBlur={() => handleBlur('academic', 'courseType')}
-                    hasError={showWarning('academic', 'courseType')}
+                    onChange={(e) =>
+                      handleChange("academic", "courseType", e.target.value)
+                    }
+                    onBlur={() => handleBlur("academic", "courseType")}
+                    hasError={showWarning("academic", "courseType")}
                   >
                     <option value="">Select Course Type</option>
                     <option value="undergraduate">Undergraduate</option>
@@ -222,7 +220,7 @@ const Preferences = () => {
                     <option value="diploma">Diploma</option>
                     <option value="certification">Certification</option>
                   </Select>
-                  {showWarning('academic', 'courseType') && (
+                  {showWarning("academic", "courseType") && (
                     <WarningText>Please select a course type</WarningText>
                   )}
                   {preferences.academic.courseType && (
@@ -236,9 +234,11 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.academic.studyMode}
-                    onChange={(e) => handleChange('academic', 'studyMode', e.target.value)}
-                    onBlur={() => handleBlur('academic', 'studyMode')}
-                    hasError={showWarning('academic', 'studyMode')}
+                    onChange={(e) =>
+                      handleChange("academic", "studyMode", e.target.value)
+                    }
+                    onBlur={() => handleBlur("academic", "studyMode")}
+                    hasError={showWarning("academic", "studyMode")}
                   >
                     <option value="">Select Study Mode</option>
                     <option value="fullTime">Full Time</option>
@@ -246,7 +246,7 @@ const Preferences = () => {
                     <option value="online">Online</option>
                     <option value="hybrid">Hybrid</option>
                   </Select>
-                  {showWarning('academic', 'studyMode') && (
+                  {showWarning("academic", "studyMode") && (
                     <WarningText>Please select a study mode</WarningText>
                   )}
                   {preferences.academic.studyMode && (
@@ -260,16 +260,22 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.academic.preferredLocation}
-                    onChange={(e) => handleChange('academic', 'preferredLocation', e.target.value)}
-                    onBlur={() => handleBlur('academic', 'preferredLocation')}
-                    hasError={showWarning('academic', 'preferredLocation')}
+                    onChange={(e) =>
+                      handleChange(
+                        "academic",
+                        "preferredLocation",
+                        e.target.value
+                      )
+                    }
+                    onBlur={() => handleBlur("academic", "preferredLocation")}
+                    hasError={showWarning("academic", "preferredLocation")}
                   >
                     <option value="">Select Location</option>
                     <option value="local">Local</option>
                     <option value="national">National</option>
                     <option value="international">International</option>
                   </Select>
-                  {showWarning('academic', 'preferredLocation') && (
+                  {showWarning("academic", "preferredLocation") && (
                     <WarningText>Please select a location</WarningText>
                   )}
                   {preferences.academic.preferredLocation && (
@@ -283,9 +289,11 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.academic.budgetRange}
-                    onChange={(e) => handleChange('academic', 'budgetRange', e.target.value)}
-                    onBlur={() => handleBlur('academic', 'budgetRange')}
-                    hasError={showWarning('academic', 'budgetRange')}
+                    onChange={(e) =>
+                      handleChange("academic", "budgetRange", e.target.value)
+                    }
+                    onBlur={() => handleBlur("academic", "budgetRange")}
+                    hasError={showWarning("academic", "budgetRange")}
                   >
                     <option value="">Select Budget Range</option>
                     <option value="0-100000">Below 1 Lakh</option>
@@ -293,7 +301,7 @@ const Preferences = () => {
                     <option value="300000-500000">3-5 Lakhs</option>
                     <option value="500000+">Above 5 Lakhs</option>
                   </Select>
-                  {showWarning('academic', 'budgetRange') && (
+                  {showWarning("academic", "budgetRange") && (
                     <WarningText>Please select a budget range</WarningText>
                   )}
                   {preferences.academic.budgetRange && (
@@ -312,16 +320,24 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.communication.preferredLanguage}
-                    onChange={(e) => handleChange('communication', 'preferredLanguage', e.target.value)}
-                    onBlur={() => handleBlur('communication', 'preferredLanguage')}
-                    hasError={showWarning('communication', 'preferredLanguage')}
+                    onChange={(e) =>
+                      handleChange(
+                        "communication",
+                        "preferredLanguage",
+                        e.target.value
+                      )
+                    }
+                    onBlur={() =>
+                      handleBlur("communication", "preferredLanguage")
+                    }
+                    hasError={showWarning("communication", "preferredLanguage")}
                   >
                     <option value="">Select Language</option>
                     <option value="english">English</option>
                     <option value="hindi">Hindi</option>
                     <option value="other">Other</option>
                   </Select>
-                  {showWarning('communication', 'preferredLanguage') && (
+                  {showWarning("communication", "preferredLanguage") && (
                     <WarningText>Please select a language</WarningText>
                   )}
                   {preferences.communication.preferredLanguage && (
@@ -335,17 +351,27 @@ const Preferences = () => {
                 <SelectWrapper>
                   <Select
                     value={preferences.communication.communicationMode}
-                    onChange={(e) => handleChange('communication', 'communicationMode', e.target.value)}
-                    onBlur={() => handleBlur('communication', 'communicationMode')}
-                    hasError={showWarning('communication', 'communicationMode')}
+                    onChange={(e) =>
+                      handleChange(
+                        "communication",
+                        "communicationMode",
+                        e.target.value
+                      )
+                    }
+                    onBlur={() =>
+                      handleBlur("communication", "communicationMode")
+                    }
+                    hasError={showWarning("communication", "communicationMode")}
                   >
                     <option value="">Select Mode</option>
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
                     <option value="chat">Chat</option>
                   </Select>
-                  {showWarning('communication', 'communicationMode') && (
-                    <WarningText>Please select a communication mode</WarningText>
+                  {showWarning("communication", "communicationMode") && (
+                    <WarningText>
+                      Please select a communication mode
+                    </WarningText>
                   )}
                   {preferences.communication.communicationMode && (
                     <ValidationIcon isValid={true}>✓</ValidationIcon>
@@ -360,14 +386,12 @@ const Preferences = () => {
               Reset Preferences
             </Button>
             <Button type="submit" disabled={formStatus.loading}>
-              {formStatus.loading ? 'Saving...' : 'Save Preferences'}
+              {formStatus.loading ? "Saving..." : "Save Preferences"}
             </Button>
           </ButtonContainer>
 
           {formStatus.lastSaved && (
-            <HelperText>
-              Last saved: {formStatus.lastSaved}
-            </HelperText>
+            <HelperText>Last saved: {formStatus.lastSaved}</HelperText>
           )}
         </form>
       </FormContainer>

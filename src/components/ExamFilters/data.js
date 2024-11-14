@@ -1,0 +1,35 @@
+export const getFilterOptions = {
+  streams: [
+    { value: "Commerce and Banking", label: "Commerce and Banking" },
+    { value: "Design", label: "Design" },
+    { value: "Engineering", label: "Engineering" },
+    { value: "Management", label: "Management" },
+    { value: "Hotel Management", label: "Hotel Management" },
+    { value: "Information Technology", label: "Information Technology" },
+    { value: "Medical", label: "Medical" },
+    { value: "Defence", label: "Defence" },
+  ],
+  degree: [
+    { value: "PGDM", label: "PGDM" },
+    { value: "B.Ed", label: "B.Ed" },
+    { value: "MA", label: "MA" },
+    { value: "MSc", label: "MSc" },
+    { value: "Diploma", label: "Diploma" },
+    { value: "B.Tech", label: "B.Tech" },
+    { value: "MBBS", label: "MBBS" },
+    { value: "Any Graduate", label: "Any Graduate" },
+  ],
+  level: [
+    { value: "PG", label: "PG" },
+    { value: "UG", label: "UG" },
+    { value: "Diploma", label: "Diploma" },
+    { value: "Certificate", label: "Certificate" },
+    { value: "Ph.D", label: "Ph.D" },
+  ],
+  mode: [
+    { value: "Online", label: "Online" },
+    { value: "Offline", label: "Offline" },
+    { value: "Both Online & Offline", label: "Both Online & Offline" },
+    { value: "None", label: "None" },
+  ],
+};

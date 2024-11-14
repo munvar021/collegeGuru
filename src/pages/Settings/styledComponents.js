@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FormContainer = styled.div`
   background-color: #ffffff;
@@ -21,7 +21,7 @@ export const FormContainer = styled.div`
 
 export const Section = styled.section`
   margin-bottom: 2rem;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -72,7 +72,7 @@ export const ToggleLabel = styled.span`
   font-weight: 500;
 `;
 
-export const ToggleSwitch = styled.input.attrs({ type: 'checkbox' })`
+export const ToggleSwitch = styled.input.attrs({ type: "checkbox" })`
   position: relative;
   width: 50px;
   height: 26px;
@@ -88,7 +88,7 @@ export const ToggleSwitch = styled.input.attrs({ type: 'checkbox' })`
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 3px;
     left: 3px;
@@ -112,7 +112,7 @@ export const TextArea = styled.textarea`
   width: 100%;
   min-height: 120px;
   padding: 1rem;
-  border: 2px solid ${props => props.error ? '#ff4d4d' : '#e4e4e4'};
+  border: 2px solid ${(props) => (props.error ? "#ff4d4d" : "#e4e4e4")};
   border-radius: 8px;
   resize: vertical;
   font-family: inherit;

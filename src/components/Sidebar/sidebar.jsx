@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
-import {SidebarContainer, ProfileSection, Avatar, UserInfo, NavSection, NavItem} from './styledComponents';
-import {FaHome, FaUser, FaGraduationCap, FaHeadset, FaHistory, FaGift, FaFileAlt, FaPencilAlt, FaCog} from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import {
+  SidebarContainer,
+  ProfileSection,
+  Avatar,
+  UserInfo,
+  NavSection,
+  NavItem,
+} from "./styledComponents";
+import {
+  FaHome,
+  FaUser,
+  FaGraduationCap,
+  FaHeadset,
+  FaHistory,
+  FaGift,
+  FaFileAlt,
+  FaPencilAlt,
+  FaCog,
+} from "react-icons/fa";
 
 const Sidebar = ({ isOpen }) => {
   return (
