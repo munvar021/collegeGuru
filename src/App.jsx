@@ -8,6 +8,7 @@ import Courses from "./pages/Courses/courses";
 import ExamDashboard from "./pages/ExamDashboard/examDashboard";
 import Dashboard from "./pages/Dashboard/dashboard";
 import Profile from "./pages/Profile/profile";
+import Documents from "./pages/Documents/documents";
 import Settings from "./pages/Settings/settings";
 import { AppContainer, MainContent } from "./styles/AppStyles";
 
@@ -41,6 +42,7 @@ const App = () => {
               <Route exact path="/exam" element={<ExamDashboard />} />
               <Route exact path="/dashboard" element={<Dashboard />} />
               <Route exact path="/profile" element={<Profile />} />
+              <Route exact path="/documents" element={<Documents />} />
               <Route exact path="/settings" element={<Settings />} />
               {/* Add other routes as needed */}
             </Routes>
