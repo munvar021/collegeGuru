@@ -11,73 +11,94 @@ import {
 } from "./styledComponents";
 
 const Courses = () => {
-  const [selectedSearch, setSelectedSearch] = useState("");
-  const [filters, setFilters] = useState({
-    duration: [],
-    mode: [],
-    fees: { min: 0, max: 100000 },
-  });
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    totalPages: 1,
-    total: 0,
+  const [state, setState] = useState({
+    selectedSearch: "",
+    filters: {
+      duration: [],
+      mode: [],
+      fees: { min: 0, max: 100000 },
+    },
+    courses: [],
+    loading: true,
+    pagination: {
+      page: 1,
+      limit: 10,
+      totalPages: 1,
+      total: 0,
+    },
   });
 
   useEffect(() => {
     const loadCourses = async () => {
       try {
-        setLoading(true);
+        setState((prev) => ({ ...prev, loading: true }));
         const result = await coursesApi.fetchCourses({
-          page: pagination.page,
-          limit: pagination.limit,
-          duration: filters.duration,
-          mode: filters.mode,
-          title: selectedSearch,
-          minFees: filters.fees.min,
-          maxFees: filters.fees.max,
+          page: state.pagination.page,
+          limit: state.pagination.limit,
+          duration: state.filters.duration,
+          mode: state.filters.mode,
+          title: state.selectedSearch,
+          minFees: state.filters.fees.min,
+          maxFees: state.filters.fees.max,
         });
 
-        setCourses(result.data);
-        setPagination((prev) => ({
+        setState((prev) => ({
           ...prev,
-          totalPages: result.pagination.totalPages,
-          total: result.pagination.total,
+          courses: result.data,
+          pagination: {
+            ...prev.pagination,
+            totalPages: result.pagination.totalPages,
+            total: result.pagination.total,
+          },
+          loading: false,
         }));
       } catch (error) {
         console.error(error.message);
-      } finally {
-        setLoading(false);
+        setState((prev) => ({ ...prev, loading: false }));
       }
     };
 
     loadCourses();
-  }, [filters, selectedSearch, pagination.page, pagination.limit]);
+  }, [
+    state.filters,
+    state.selectedSearch,
+    state.pagination.page,
+    state.pagination.limit,
+  ]);
 
   const handlePageChange = (page) => {
-    setPagination((prev) => ({ ...prev, page }));
+    setState((prev) => ({
+      ...prev,
+      pagination: { ...prev.pagination, page },
+    }));
+  };
+
+  const handleSearchSelect = (search) => {
+    setState((prev) => ({ ...prev, selectedSearch: search }));
+  };
+
+  const handleFilterChange = (filters) => {
+    setState((prev) => ({ ...prev, filters }));
   };
 
   return (
     <CoursesContainer>
       <TopSearches
-        onSearchSelect={setSelectedSearch}
-        selectedSearch={selectedSearch}
+        onSearchSelect={handleSearchSelect}
+        selectedSearch={state.selectedSearch}
       />
       <ContentWrapper>
-        <Filters filters={filters} onFilterChange={setFilters} />
-        {loading ? (
+        <Filters filters={state.filters} onFilterChange={handleFilterChange} />
+        {state.loading ? (
           <LoadingSpinner>
-            <div className="spinner"></div>
+            <div className="spinner" />
           </LoadingSpinner>
-        ) : courses.length === 0 ? (
+        ) : state.courses.length === 0 ? (
           <EmptyView>No courses found matching your criteria.</EmptyView>
         ) : (
           <CoursesList
-            courses={courses}
-            pagination={pagination}
+            courses={state.courses}
+            pagination={state.pagination}
             onPageChange={handlePageChange}
           />
         )}

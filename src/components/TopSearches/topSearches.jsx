@@ -6,24 +6,22 @@ import {
   SearchBubbles,
   SearchBubble,
   ClearButton,
+  HeaderContent,
+  HeaderTitle,
 } from "./styledComponents";
 
 const TopSearches = ({ onSearchSelect, selectedSearch }) => {
   const handleBubbleClick = (search) => {
-    if (selectedSearch === search) {
-      onSearchSelect("");
-    } else {
-      onSearchSelect(search);
-    }
+    onSearchSelect(selectedSearch === search ? "" : search);
   };
 
   return (
     <SearchSection>
       <SearchHeader>
-        <div className="header-content">
+        <HeaderContent>
           <Search size={20} />
-          <h2>Popular Searches</h2>
-        </div>
+          <HeaderTitle>Popular Searches</HeaderTitle>
+        </HeaderContent>
         {selectedSearch && (
           <ClearButton onClick={() => onSearchSelect("")}>
             <X size={16} />
@@ -37,7 +35,7 @@ const TopSearches = ({ onSearchSelect, selectedSearch }) => {
           <SearchBubble
             key={search}
             onClick={() => handleBubbleClick(search)}
-            className={selectedSearch === search ? "active" : ""}
+            $active={selectedSearch === search}
           >
             {search}
           </SearchBubble>

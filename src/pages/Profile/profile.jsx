@@ -1,61 +1,59 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import BasicDetails from "../../components/BasicDetails/basicDetails";
 import ContactDetails from "../../components/ContactDetails/contactDetails";
 import EducationDetails from "../../components/EducationDetails/educationDetails";
 import Preferences from "../../components/Preferences/preferences";
+import { PROFILE_TABS } from "./data";
 import {
   ProfileContainer,
   TabContainer,
   Tab,
   ContentWrapper,
-  // PageTitle,
   TabIcon,
   TabText,
   TabContent,
 } from "./styledComponents";
-import { User, Phone, GraduationCap, Settings2 } from "lucide-react";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("basic");
-
-  const tabs = [
-    { id: "basic", label: "Basic Details", icon: User },
-    { id: "contact", label: "Contact Details", icon: Phone },
-    { id: "education", label: "Education Details", icon: GraduationCap },
-    { id: "preferences", label: "Preferences", icon: Settings2 },
-  ];
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      // Add your form default values here
+      // This will be used across all form components
+    },
+  });
 
   const renderContent = () => {
+    const props = { control, handleSubmit };
+
     switch (activeTab) {
       case "basic":
-        return <BasicDetails />;
+        return <BasicDetails {...props} />;
       case "contact":
-        return <ContactDetails />;
+        return <ContactDetails {...props} />;
       case "education":
-        return <EducationDetails />;
+        return <EducationDetails {...props} />;
       case "preferences":
-        return <Preferences />;
+        return <Preferences {...props} />;
       default:
-        return <BasicDetails />;
+        return <BasicDetails {...props} />;
     }
   };
 
   return (
     <ProfileContainer>
-      {/* <PageTitle>Profile Settings</PageTitle> */}
-
       <TabContainer>
-        {tabs.map((tab) => (
+        {PROFILE_TABS.map((tab) => (
           <Tab
             key={tab.id}
-            active={activeTab === tab.id}
+            $isActive={activeTab === tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={activeTab === tab.id ? "active" : ""}
           >
-            <TabIcon>
+            <TabIcon $isActive={activeTab === tab.id}>
               <tab.icon size={20} />
             </TabIcon>
-            <TabText>{tab.label}</TabText>
+            <TabText $isActive={activeTab === tab.id}>{tab.label}</TabText>
           </Tab>
         ))}
       </TabContainer>

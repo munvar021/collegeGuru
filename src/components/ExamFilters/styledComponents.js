@@ -1,4 +1,3 @@
-// src/components/Filters/styledComponents.js
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -85,7 +84,6 @@ export const CloseButton = styled.button`
   }
 `;
 
-// Update other styled components with increased border-radius
 export const CardContainer = styled.div`
   background: white;
   border-radius: 12px;

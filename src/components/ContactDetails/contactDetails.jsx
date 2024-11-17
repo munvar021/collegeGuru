@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
-import { stateOptions } from "./data";
+import { stateOptions, FORM_VALIDATION_RULES } from "./data";
 import {
+  FormWrapper,
   FormContainer,
   FormTitle,
   FormGroup,
@@ -9,71 +11,28 @@ import {
   Label,
   ErrorMessage,
   SubmitButton,
-  FormWrapper,
+  StatusMessage,
+  LastSaved,
 } from "./styledComponents";
 
 const ContactDetails = () => {
-  const [formData, setFormData] = useState({
-    mobile: "",
-    email: "",
-    city: "",
-    state: null,
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    defaultValues: {
+      mobile: "",
+      email: "",
+      city: "",
+      state: null,
+    },
   });
 
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = React.useState(null);
   const [lastSuccessfulSubmission, setLastSuccessfulSubmission] =
-    useState(null);
-
-  useEffect(() => {
-    if (submitStatus === "success") {
-      console.log("Updated Form Data:", formData);
-    }
-  }, [submitStatus, formData]);
-
-  const validateField = (name, value) => {
-    if (!value || !value.trim()) {
-      return `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-    }
-
-    switch (name) {
-      case "email":
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value.trim())) {
-          return "Please enter a valid email address";
-        }
-        if (value.length > 100) {
-          return "Email address is too long (maximum 100 characters)";
-        }
-        break;
-
-      case "mobile":
-        const phoneRegex = /^\d{10}$/;
-        const digitsOnly = value.replace(/\D/g, "");
-        if (!phoneRegex.test(digitsOnly)) {
-          return "Please enter a valid 10-digit mobile number";
-        }
-        break;
-
-      case "city":
-        if (!/^[a-zA-Z\s]{2,50}$/.test(value.trim())) {
-          return "City name should only contain letters and spaces (2-50 characters)";
-        }
-        break;
-
-      case "state":
-        if (!value) {
-          return "Please select a valid state";
-        }
-        break;
-
-      default:
-        break;
-    }
-    return "";
-  };
+    React.useState(null);
 
   const formatPhoneNumber = (value) => {
     const digits = value.replace(/\D/g, "");
@@ -81,46 +40,6 @@ const ContactDetails = () => {
       return digits.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
     }
     return digits.slice(0, 10).replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-  };
-
-  const handleChange = (e, name) => {
-    let formattedValue = e.value;
-
-    if (name === "mobile") {
-      formattedValue = formatPhoneNumber(e.target.value);
-    } else if (name === "state") {
-      formattedValue = e?.value || null;
-    } else {
-      formattedValue = e.target.value.trim();
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: formattedValue,
-    }));
-
-    if (touched[name]) {
-      const error = validateField(name, formattedValue);
-      setErrors((prev) => ({
-        ...prev,
-        [name]: error,
-      }));
-    }
-  };
-
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-
-    setTouched((prev) => ({
-      ...prev,
-      [name]: true,
-    }));
-
-    const error = validateField(name, value);
-    setErrors((prev) => ({
-      ...prev,
-      [name]: error,
-    }));
   };
 
   const simulateApiCall = async (data) => {
@@ -134,39 +53,13 @@ const ContactDetails = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const newErrors = {};
-    Object.keys(formData).forEach((key) => {
-      const error = validateField(key, formData[key]);
-      if (error) {
-        newErrors[key] = error;
-      }
-    });
-
-    setErrors(newErrors);
-    setTouched({
-      mobile: true,
-      email: true,
-      city: true,
-      state: true,
-    });
-
-    if (Object.keys(newErrors).length === 0) {
-      setIsSubmitting(true);
-
-      try {
-        await simulateApiCall(formData);
-        setSubmitStatus("success");
-        setLastSuccessfulSubmission(new Date().toISOString());
-        console.log("Successful Submission:", formData);
-      } catch (error) {
-        setSubmitStatus("error");
-      } finally {
-        setIsSubmitting(false);
-      }
-    } else {
+  const onSubmit = async (data) => {
+    try {
+      await simulateApiCall(data);
+      setSubmitStatus("success");
+      setLastSuccessfulSubmission(new Date().toISOString());
+      console.log("Successful Submission:", data);
+    } catch (error) {
       setSubmitStatus("error");
     }
   };
@@ -174,7 +67,7 @@ const ContactDetails = () => {
   return (
     <FormWrapper>
       <FormContainer
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         role="form"
         aria-label="Contact Details Form"
       >
@@ -182,96 +75,107 @@ const ContactDetails = () => {
 
         <FormGroup>
           <Label htmlFor="mobile">Mobile Number *</Label>
-          <Input
-            id="mobile"
-            type="tel"
+          <Controller
             name="mobile"
-            value={formData.mobile}
-            onChange={(e) => handleChange(e, "mobile")}
-            onBlur={handleBlur}
-            placeholder="Enter 10-digit mobile number"
-            $hasError={touched.mobile && errors.mobile}
-            aria-required="true"
-            aria-invalid={!!errors.mobile}
-            maxLength={12}
+            control={control}
+            rules={FORM_VALIDATION_RULES.mobile}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="mobile"
+                type="tel"
+                placeholder="Enter 10-digit mobile number"
+                $hasError={!!errors.mobile}
+                aria-invalid={!!errors.mobile}
+                onChange={(e) =>
+                  field.onChange(formatPhoneNumber(e.target.value))
+                }
+                maxLength={12}
+              />
+            )}
           />
-          {touched.mobile && errors.mobile && (
-            <ErrorMessage role="alert">{errors.mobile}</ErrorMessage>
+          {errors.mobile && (
+            <ErrorMessage role="alert">{errors.mobile.message}</ErrorMessage>
           )}
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="email">Email Address *</Label>
-          <Input
-            id="email"
-            type="email"
+          <Controller
             name="email"
-            value={formData.email}
-            onChange={(e) => handleChange(e, "email")}
-            onBlur={handleBlur}
-            placeholder="Enter your email address"
-            $hasError={touched.email && errors.email}
-            aria-required="true"
-            aria-invalid={!!errors.email}
-            maxLength={100}
+            control={control}
+            rules={FORM_VALIDATION_RULES.email}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="email"
+                type="email"
+                placeholder="Enter your email address"
+                $hasError={!!errors.email}
+                aria-invalid={!!errors.email}
+                maxLength={100}
+              />
+            )}
           />
-          {touched.email && errors.email && (
-            <ErrorMessage role="alert">{errors.email}</ErrorMessage>
+          {errors.email && (
+            <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
           )}
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="city">City *</Label>
-          <Input
-            id="city"
-            type="text"
+          <Controller
             name="city"
-            value={formData.city}
-            onChange={(e) => handleChange(e, "city")}
-            onBlur={handleBlur}
-            placeholder="Enter your city"
-            $hasError={touched.city && errors.city}
-            aria-required="true"
-            aria-invalid={!!errors.city}
-            maxLength={50}
+            control={control}
+            rules={FORM_VALIDATION_RULES.city}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="city"
+                type="text"
+                placeholder="Enter your city"
+                $hasError={!!errors.city}
+                aria-invalid={!!errors.city}
+                maxLength={50}
+              />
+            )}
           />
-          {touched.city && errors.city && (
-            <ErrorMessage role="alert">{errors.city}</ErrorMessage>
+          {errors.city && (
+            <ErrorMessage role="alert">{errors.city.message}</ErrorMessage>
           )}
         </FormGroup>
 
         <FormGroup>
           <Label htmlFor="state">State *</Label>
-          <Select
-            id="state"
+          <Controller
             name="state"
-            options={stateOptions}
-            value={formData.state}
-            onChange={(e) => handleChange(e, "state")}
-            onBlur={handleBlur}
-            $hasError={touched.state && errors.state}
-            aria-required="true"
-            aria-invalid={!!errors.state}
-            isClearable
-            isSearchable
-            placeholder="Select State"
-            noOptionsMessage={() => "No state found"}
+            control={control}
+            rules={FORM_VALIDATION_RULES.state}
+            render={({ field }) => (
+              <Select
+                {...field}
+                id="state"
+                options={stateOptions}
+                $hasError={!!errors.state}
+                aria-invalid={!!errors.state}
+                isClearable
+                isSearchable
+                placeholder="Select State"
+                noOptionsMessage={() => "No state found"}
+              />
+            )}
           />
-          {touched.state && errors.state && (
-            <ErrorMessage role="alert">{errors.state}</ErrorMessage>
+          {errors.state && (
+            <ErrorMessage role="alert">{errors.state.message}</ErrorMessage>
           )}
         </FormGroup>
 
-        {submitStatus === "success" && (
-          <div role="alert" style={{ color: "#059669", marginTop: "1rem" }}>
-            Contact details saved successfully!
-          </div>
-        )}
-
-        {submitStatus === "error" && (
-          <div role="alert" style={{ color: "#DC2626", marginTop: "1rem" }}>
-            An error occurred while saving contact details. Please try again.
-          </div>
+        {submitStatus && (
+          <StatusMessage role="alert" $type={submitStatus}>
+            {submitStatus === "success"
+              ? "Contact details saved successfully!"
+              : "An error occurred while saving contact details. Please try again."}
+          </StatusMessage>
         )}
 
         <SubmitButton
@@ -283,16 +187,9 @@ const ContactDetails = () => {
         </SubmitButton>
 
         {lastSuccessfulSubmission && (
-          <div
-            style={{
-              fontSize: "0.75rem",
-              color: "#6B7280",
-              marginTop: "0.5rem",
-              textAlign: "center",
-            }}
-          >
+          <LastSaved>
             Last saved: {new Date(lastSuccessfulSubmission).toLocaleString()}
-          </div>
+          </LastSaved>
         )}
       </FormContainer>
     </FormWrapper>

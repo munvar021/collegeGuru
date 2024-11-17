@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ExamDashboardContainer = styled.div`
   display: flex;
@@ -6,7 +6,7 @@ export const ExamDashboardContainer = styled.div`
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  
+
   @media (max-width: 1024px) {
     flex-direction: column;
   }
@@ -36,7 +36,7 @@ export const NoResults = styled.div`
     text-decoration: underline;
     cursor: pointer;
     margin-left: 0.5rem;
-    
+
     &:hover {
       color: #2f3d89;
     }

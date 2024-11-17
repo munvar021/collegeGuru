@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import {
   FaSearch,
   FaShoppingCart,
@@ -7,6 +8,7 @@ import {
   FaBars,
   FaAngleDown,
 } from "react-icons/fa";
+import { NAV_LINKS } from "./data";
 import {
   HeaderContainer,
   Logo,
@@ -20,69 +22,104 @@ import {
   NavToggle,
   PopupNav,
   SearchPopup,
+  SearchForm,
 } from "./styledComponents";
 
 const Header = ({ toggleSidebar }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [navVisible, setNavVisible] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
+  const { register, handleSubmit } = useForm();
+  const [headerState, setHeaderState] = React.useState({
+    isScrolled: false,
+    navVisible: false,
+    searchVisible: false,
+  });
+
+  const { isScrolled, navVisible, searchVisible } = headerState;
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      setHeaderState((prev) => ({
+        ...prev,
+        isScrolled: window.scrollY > 0,
+      }));
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleNav = () => {
-    setNavVisible(!navVisible);
+    setHeaderState((prev) => ({
+      ...prev,
+      navVisible: !prev.navVisible,
+    }));
   };
 
   const toggleSearch = () => {
-    setSearchVisible(!searchVisible);
+    setHeaderState((prev) => ({
+      ...prev,
+      searchVisible: !prev.searchVisible,
+    }));
+  };
+
+  const onSearchSubmit = (data) => {
+    console.log("Search submitted:", data.search);
+    // Handle search logic here
   };
 
   return (
-    <HeaderContainer scrolled={isScrolled}>
-      <MobileMenuButton onClick={toggleSidebar}>
+    <HeaderContainer $scrolled={isScrolled}>
+      <MobileMenuButton type="button" onClick={toggleSidebar}>
         <FaBars />
       </MobileMenuButton>
+
       <Logo to="/">CollegeGuru</Logo>
+
       <Nav>
-        <NavLink to="/colleges">Colleges</NavLink>
-        <NavLink to="/exam">Exam</NavLink>
-        <NavLink to="/courses">Courses</NavLink>
-        <NavLink to="/careers">Careers</NavLink>
-        <NavLink to="/updates">Latest Updates</NavLink>
+        {NAV_LINKS.map(({ path, label }) => (
+          <NavLink key={path} to={path}>
+            {label}
+          </NavLink>
+        ))}
       </Nav>
-      <NavToggle onClick={toggleNav} navVisible={navVisible}>
+
+      <NavToggle type="button" onClick={toggleNav} $navVisible={navVisible}>
         <FaAngleDown className={navVisible ? "rotate" : ""} />
       </NavToggle>
+
       {navVisible && (
         <PopupNav>
-          <NavLink to="/colleges">Colleges</NavLink>
-          <NavLink to="/exam">Exam</NavLink>
-          <NavLink to="/courses">Courses</NavLink>
-          <NavLink to="/careers">Careers</NavLink>
-          <NavLink to="/updates">Latest Updates</NavLink>
+          {NAV_LINKS.map(({ path, label }) => (
+            <NavLink key={path} to={path}>
+              {label}
+            </NavLink>
+          ))}
         </PopupNav>
       )}
+
       <IconsContainer>
-        <IconButton onClick={toggleSearch}>
+        <IconButton type="button" onClick={toggleSearch}>
           <FaSearch />
         </IconButton>
+
         {searchVisible && (
           <SearchPopup>
-            <SearchBar type="search" placeholder="Search..." />
+            <SearchForm onSubmit={handleSubmit(onSearchSubmit)}>
+              <SearchBar
+                type="search"
+                placeholder="Search..."
+                {...register("search", { required: true })}
+              />
+            </SearchForm>
           </SearchPopup>
         )}
+
         <Link to="/profile">
-          <IconButton>
+          <IconButton type="button">
             <FaUser />
           </IconButton>
         </Link>
-        <IconButton>
+
+        <IconButton type="button">
           <FaShoppingCart />
           <CartCount>0</CartCount>
         </IconButton>

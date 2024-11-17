@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import TabBar from "../../components/DocumentTabBar/documentTabBar";
 import DocumentCard from "../../components/DocumentCard/documentCard";
 import {
@@ -7,86 +8,98 @@ import {
   Title,
   Subtitle,
   DocumentsGrid,
+  EmptyStateContainer,
+  EmptyStateImage,
+  EmptyStateText,
 } from "./styledComponents";
-import { DOCUMENT_TYPES, TAB_ITEMS } from "./data";
+import {
+  DOCUMENT_TYPES,
+  TAB_ITEMS,
+  FILE_CONSTRAINTS,
+  TAB_SUBTITLES,
+} from "./data";
 
 const DocumentUpload = () => {
-  const [activeTab, setActiveTab] = useState("basicDocuments");
-  const [uploadedFiles, setUploadedFiles] = useState({});
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      activeTab: "basicDocuments",
+      uploadedFiles: {},
+    },
+  });
 
-  const handleFileUpload = (documentId, file) => {
-    if (!file) return;
+  const activeTab = watch("activeTab");
+  const uploadedFiles = watch("uploadedFiles");
 
-    // Check file size (2MB limit)
-    if (file.size > 2 * 1024 * 1024) {
+  const validateFile = (file) => {
+    if (!file) return false;
+
+    if (file.size > FILE_CONSTRAINTS.maxSize) {
       alert("File size must be less than 2MB");
-      return;
+      return false;
     }
 
-    // Check file format
-    const validFormats = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "application/pdf",
-    ];
-    if (!validFormats.includes(file.type)) {
+    if (!FILE_CONSTRAINTS.validFormats.includes(file.type)) {
       alert(
         "Invalid file format. Please upload JPG, JPEG, PNG, or PDF files only."
       );
-      return;
+      return false;
     }
 
-    setUploadedFiles((prev) => ({
-      ...prev,
+    return true;
+  };
+
+  const handleFileUpload = (documentId, file) => {
+    if (!validateFile(file)) return;
+
+    setValue("uploadedFiles", {
+      ...uploadedFiles,
       [documentId]: file,
-    }));
+    });
+  };
+
+  const handleTabChange = (tabId) => {
+    setValue("activeTab", tabId);
   };
 
   const getDocumentsByTab = () => {
-    switch (activeTab) {
-      case "basicDocuments":
-        return DOCUMENT_TYPES.basicDocuments;
-      case "admissionProof":
-        return DOCUMENT_TYPES.admissionProof;
-      case "insuranceApplication":
-        return DOCUMENT_TYPES.insuranceApplication;
-      default:
-        return [];
-    }
+    return DOCUMENT_TYPES[activeTab] || [];
   };
 
   return (
-    <Container>
+    <Container as="main">
       <TabBar
         items={TAB_ITEMS}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       />
-      <ContentWrapper>
-        <Title>Securely access your documents anywhere, anytime.</Title>
-        <Subtitle>
-          {activeTab === "basicDocuments" &&
-            "Upload the documents listed below to build your profile that will help us serve you better and also earn exciting rewards Upload at least 3 documents and earn 50 reward points."}
-          {activeTab === "admissionProof" &&
-            "Upload your admission proof and earn 100 reward points."}
-          {activeTab === "insuranceApplication" &&
-            "Upload your insurance documents for verification."}
-        </Subtitle>
+      <ContentWrapper as="section">
+        <header>
+          <Title>Securely access your documents anywhere, anytime.</Title>
+          <Subtitle as="div">{TAB_SUBTITLES[activeTab]}</Subtitle>
+        </header>
 
         {activeTab === "admissionProof" && !uploadedFiles.length ? (
-          <div className="empty-state">
-            <img src="/empty-state-icon.svg" alt="No documents" />
-            <p>Oops! You don't have any admission documents yet.</p>
-          </div>
+          <EmptyStateContainer role="alert">
+            <EmptyStateImage src="/empty-state-icon.svg" alt="No documents" />
+            <EmptyStateText as="div">
+              Oops! You don't have any admission documents yet.
+            </EmptyStateText>
+          </EmptyStateContainer>
         ) : (
-          <DocumentsGrid>
+          <DocumentsGrid role="list">
             {getDocumentsByTab().map((doc) => (
               <DocumentCard
                 key={doc.id}
                 title={doc.title}
                 onUpload={(file) => handleFileUpload(doc.id, file)}
                 uploadedFile={uploadedFiles[doc.id]}
+                role="listitem"
               />
             ))}
           </DocumentsGrid>

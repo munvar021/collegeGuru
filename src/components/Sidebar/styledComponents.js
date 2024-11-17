@@ -15,11 +15,11 @@ export const SidebarContainer = styled.aside`
   z-index: 900;
 
   @media (max-width: 768px) {
-    transform: translateX(${(props) => (props.isOpen ? "0" : "-100%")});
+    transform: translateX(${({ isOpen }) => (isOpen ? "0" : "-100%")});
   }
 `;
 
-export const ProfileSection = styled.div`
+export const ProfileSection = styled.section`
   padding: 1.5rem;
   border-bottom: 1px solid #eee;
 `;
@@ -27,7 +27,7 @@ export const ProfileSection = styled.div`
 export const Avatar = styled.div`
   width: 60px;
   height: 60px;
-  background: ${(props) => props.theme.colors.secondary};
+  background: ${({ theme }) => theme.colors.secondary};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -41,27 +41,27 @@ export const Avatar = styled.div`
 export const UserInfo = styled.div`
   h3 {
     margin: 0 0 0.5rem 0;
-    color: ${(props) => props.theme.colors.text};
+    color: ${({ theme }) => theme.colors.text};
     font-size: 1.2rem;
   }
+`;
 
-  div {
-    font-size: 0.9rem;
+export const UserLinks = styled.div`
+  font-size: 0.9rem;
+`;
 
-    a {
-      color: ${(props) => props.theme.colors.secondary};
-      text-decoration: none;
+export const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.secondary};
+  text-decoration: none;
 
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    span {
-      color: #ccc;
-      margin: 0 0.5rem;
-    }
+  &:hover {
+    text-decoration: underline;
   }
+`;
+
+export const Separator = styled.span`
+  color: #ccc;
+  margin: 0 0.5rem;
 `;
 
 export const NavSection = styled.nav`
@@ -73,8 +73,8 @@ export const NavItem = styled(Link)`
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  color: ${(props) => (props.active ? props.theme.colors.secondary : "#666")};
-  background: ${(props) => (props.active ? "#f8f7ff" : "transparent")};
+  color: ${({ active, theme }) => (active ? theme.colors.secondary : "#666")};
+  background: ${({ active }) => (active ? "#f8f7ff" : "transparent")};
   text-decoration: none;
   transition: all 0.2s ease;
 
@@ -84,6 +84,6 @@ export const NavItem = styled(Link)`
 
   &:hover {
     background: #f8f7ff;
-    color: ${(props) => props.theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
   }
 `;

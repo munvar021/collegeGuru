@@ -9,12 +9,15 @@ import {
   RatingWrapper,
   Price,
   StatsWrapper,
+  MetaItem,
 } from "./styledComponents";
 
 const CourseCard = ({ course }) => {
   const averageRating =
     course.averageRating ||
     course.ratings.reduce((acc, curr) => acc + curr, 0) / course.ratings.length;
+
+  const isAdvanced = course.duration.includes("6");
 
   return (
     <Card>
@@ -24,14 +27,14 @@ const CourseCard = ({ course }) => {
         <Description>{course.description}</Description>
 
         <MetaInfo>
-          <div className="duration">
+          <MetaItem>
             <Clock size={16} />
             {course.duration}
-          </div>
-          <div className="level">
+          </MetaItem>
+          <MetaItem>
             <Award size={16} />
-            {course.duration.includes("6") ? "Advanced" : "Beginner"}
-          </div>
+            {isAdvanced ? "Advanced" : "Beginner"}
+          </MetaItem>
         </MetaInfo>
 
         <StatsWrapper>

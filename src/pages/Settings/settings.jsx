@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
+import { NOTIFICATION_OPTIONS, FORM_VALIDATION_MESSAGES } from "./data";
 import {
   FormContainer,
-  Section,
+  MainSection,
   Title,
   Subtitle,
   NotificationOptions,
@@ -15,125 +17,94 @@ import {
 } from "./styledComponents";
 
 const Settings = () => {
-  const [formData, setFormData] = useState({
-    email: false,
-    sms: false,
-    whatsapp: false,
-    concern: "",
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm({
+    defaultValues: {
+      email: false,
+      sms: false,
+      whatsapp: false,
+      concern: "",
+    },
   });
 
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const notificationValues = watch(["email", "sms", "whatsapp"]);
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (formData.concern.trim() === "") {
-      newErrors.concern = "Please describe your concern";
-    }
-
-    if (!formData.email && !formData.sms && !formData.whatsapp) {
-      newErrors.notifications =
-        "Please select at least one notification method";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
+  const onSubmit = async (data) => {
     try {
       // Simulated API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast.success("Form submitted successfully!");
-      setFormData({
-        email: false,
-        sms: false,
-        whatsapp: false,
-        concern: "",
-      });
+      reset();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const handleToggle = (field) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-    if (errors.notifications) {
-      setErrors((prev) => ({
-        ...prev,
-        notifications: "",
-      }));
-    }
+  const validateNotifications = () => {
+    return (
+      notificationValues.some((value) => value) ||
+      FORM_VALIDATION_MESSAGES.notifications
+    );
   };
 
   return (
-    <FormContainer>
-      <Section>
-        <Title>Notification & Reminders</Title>
-        <Subtitle>
-          Never miss important reminders & notifications about the latest
-          education news and your admission journey status
-        </Subtitle>
+    <FormContainer as="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <MainSection>
+        <header>
+          <Title>Notification & Reminders</Title>
+          <Subtitle>
+            Never miss important reminders & notifications about the latest
+            education news and your admission journey status
+          </Subtitle>
+        </header>
 
         <NotificationOptions>
-          <ToggleOption>
-            <ToggleLabel>Email</ToggleLabel>
-            <ToggleSwitch
-              checked={formData.email}
-              onChange={() => handleToggle("email")}
-            />
-          </ToggleOption>
-
-          <ToggleOption>
-            <ToggleLabel>SMS</ToggleLabel>
-            <ToggleSwitch
-              checked={formData.sms}
-              onChange={() => handleToggle("sms")}
-            />
-          </ToggleOption>
-
-          <ToggleOption>
-            <ToggleLabel>WhatsApp</ToggleLabel>
-            <ToggleSwitch
-              checked={formData.whatsapp}
-              onChange={() => handleToggle("whatsapp")}
-            />
-          </ToggleOption>
+          {NOTIFICATION_OPTIONS.map(({ id, label }) => (
+            <ToggleOption key={id}>
+              <ToggleLabel htmlFor={id}>{label}</ToggleLabel>
+              <Controller
+                name={id}
+                control={control}
+                rules={{ validate: validateNotifications }}
+                render={({ field: { value, onChange } }) => (
+                  <ToggleSwitch id={id} checked={value} onChange={onChange} />
+                )}
+              />
+            </ToggleOption>
+          ))}
         </NotificationOptions>
-        {errors.notifications && (
-          <ErrorMessage>{errors.notifications}</ErrorMessage>
+        {errors.email?.message && (
+          <ErrorMessage>{FORM_VALIDATION_MESSAGES.notifications}</ErrorMessage>
         )}
-      </Section>
+      </MainSection>
 
-      <Section>
-        <Title>Report an Issue</Title>
-        <TextArea
-          placeholder="What is your concern?"
-          value={formData.concern}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, concern: e.target.value }))
-          }
-          error={errors.concern}
+      <MainSection>
+        <Title as="h2">Report an Issue</Title>
+        <Controller
+          name="concern"
+          control={control}
+          rules={{ required: FORM_VALIDATION_MESSAGES.concern }}
+          render={({ field }) => (
+            <TextArea
+              {...field}
+              placeholder="What is your concern?"
+              error={!!errors.concern}
+            />
+          )}
         />
-        {errors.concern && <ErrorMessage>{errors.concern}</ErrorMessage>}
+        {errors.concern && (
+          <ErrorMessage>{errors.concern.message}</ErrorMessage>
+        )}
 
-        <SubmitButton onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? "Submitting..." : "Submit"}
+        <SubmitButton type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
         </SubmitButton>
-      </Section>
+      </MainSection>
     </FormContainer>
   );
 };

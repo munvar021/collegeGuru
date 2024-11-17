@@ -19,6 +19,14 @@ export const FormContainer = styled.div`
   }
 `;
 
+export const MainSection = styled.section`
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 export const Section = styled.section`
   margin-bottom: 2rem;
 
@@ -27,7 +35,7 @@ export const Section = styled.section`
   }
 `;
 
-export const Title = styled.h2`
+export const Title = styled.h1`
   font-size: 1.5rem;
   color: #1a1a1a;
   margin-bottom: 1rem;

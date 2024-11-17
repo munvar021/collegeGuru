@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProfileBanner = styled.div`
+export const ProfileBanner = styled.section`
   background: #f5f7ff;
   border-radius: 12px;
   padding: 24px;
@@ -16,6 +16,12 @@ export const ProfileBanner = styled.div`
   }
 `;
 
+export const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+`;
+
 export const ProgressCircle = styled.div`
   width: 150px;
   height: 100px;
@@ -23,7 +29,6 @@ export const ProgressCircle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 
   &::before {
     content: "";
@@ -33,8 +38,28 @@ export const ProgressCircle = styled.div`
     border-radius: 50%;
     border: 4px solid #e0e6ff;
     border-top-color: #4c6fff;
-    // transform: rotate(-45deg);
   }
+`;
+
+export const ProgressText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    font-size: 0.8rem;
+  }
+`;
+
+export const ProfileContent = styled.div``;
+
+export const ProfileTitle = styled.h2`
+  margin: 0 0 8px 0;
+`;
+
+export const ProfileDescription = styled.div`
+  margin: 0;
+  color: #666;
 `;
 
 export const CompleteProfileButton = styled.button`

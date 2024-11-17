@@ -7,6 +7,9 @@ export const cardData = [
       "Our expert counsellors are ready to help you to complete your admission process.",
     link: "Schedule a Call",
     icon: MessageCircle,
+    onClick: () => {
+      /* Add callback function */
+    },
   },
   {
     title: "Refer & Earn",
@@ -14,6 +17,9 @@ export const cardData = [
       "Refer Collegedekho to a friend and earn reward points that you redeem in your Paytm Wallet",
     link: "Refer a Friend",
     icon: Award,
+    onClick: () => {
+      /* Add callback function */
+    },
   },
   {
     title: "Career Profile Test",
@@ -21,6 +27,9 @@ export const cardData = [
       "A scientific assessment method that can analyze your aptitude, capabilities, personality, and interests and suggest the best-fit career options for you.",
     link: "Predict Your Career",
     icon: Briefcase,
+    onClick: () => {
+      /* Add callback function */
+    },
   },
   {
     title: "CollegeDekho Insurance",
@@ -28,5 +37,8 @@ export const cardData = [
       "Get yourself or your parents covered with an insurance and continue uninterrupted education.",
     link: "Learn More",
     icon: Heart,
+    onClick: () => {
+      /* Add callback function */
+    },
   },
 ];

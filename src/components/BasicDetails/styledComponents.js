@@ -147,3 +147,21 @@ export const SubmitButton = styled.button`
     align-self: flex-start;
   }
 `;
+
+export const StatusMessage = styled.div`
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.success {
+    background-color: #ecfdf5;
+    color: #059669;
+  }
+
+  &.error {
+    background-color: #fef2f2;
+    color: #dc2626;
+  }
+`;

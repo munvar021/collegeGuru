@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const CardsGrid = styled.div`
+export const CardsGrid = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
   margin-bottom: 40px;
 `;
 
-export const Card = styled.div`
+export const Card = styled.article`
   background: white;
   border-radius: 12px;
   padding: 24px;
@@ -32,26 +32,31 @@ export const CardTitle = styled.h3`
   color: #1a1a1a;
 `;
 
-export const CardDescription = styled.p`
+export const CardDescription = styled.div`
   margin: 0 0 16px 0;
   color: #666;
   font-size: 0.9rem;
   line-height: 1.5;
 `;
 
-export const CardLink = styled.a`
+export const CardLink = styled.button`
   color: #4c6fff;
-  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
   font-size: 0.9rem;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
   }
 `;
+
+export const CardLinkText = styled.span``;
 
 export const IconWrapper = styled.div`
   width: 48px;

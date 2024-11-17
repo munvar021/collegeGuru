@@ -1,5 +1,22 @@
 import styled from "styled-components";
 
+export const HeaderContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  svg {
+    color: #4b5563;
+  }
+`;
+
+export const HeaderTitle = styled.h2`
+  margin: 0;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  font-weight: 600;
+`;
+
 export const SearchSection = styled.div`
   background: white;
   border-radius: 16px;
@@ -44,9 +61,9 @@ export const SearchBubbles = styled.div`
 export const SearchBubble = styled.button`
   padding: 0.6rem 1.2rem;
   border-radius: 25px;
-  background: #f3f4f6;
-  border: 2px solid transparent;
-  color: #4b5563;
+  background: ${(props) => (props.$active ? "#eef2ff" : "#f3f4f6")};
+  border: 2px solid ${(props) => (props.$active ? "#4f46e5" : "transparent")};
+  color: ${(props) => (props.$active ? "#4f46e5" : "#4b5563")};
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -54,14 +71,8 @@ export const SearchBubble = styled.button`
   white-space: nowrap;
 
   &:hover {
-    background: #e5e7eb;
-    color: #1a1a1a;
-  }
-
-  &.active {
-    background: #eef2ff;
-    border-color: #4f46e5;
-    color: #4f46e5;
+    background: ${(props) => (props.$active ? "#eef2ff" : "#e5e7eb")};
+    color: ${(props) => (props.$active ? "#4f46e5" : "#1a1a1a")};
   }
 
   @media (max-width: 640px) {

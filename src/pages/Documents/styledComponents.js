@@ -32,7 +32,7 @@ export const Title = styled.h1`
   }
 `;
 
-export const Subtitle = styled.p`
+export const Subtitle = styled.div`
   font-size: 16px;
   color: #666666;
   margin-bottom: 24px;
@@ -50,4 +50,24 @@ export const DocumentsGrid = styled.div`
   @media (min-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
   }
+`;
+
+export const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+`;
+
+export const EmptyStateImage = styled.img`
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+`;
+
+export const EmptyStateText = styled.div`
+  font-size: 1rem;
+  color: #666;
 `;

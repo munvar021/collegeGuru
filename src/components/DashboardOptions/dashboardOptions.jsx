@@ -3,6 +3,7 @@ import {
   OptionTitle,
   OptionsList,
   OptionItem,
+  OptionContent,
 } from "./styledCompnents";
 import { optionsData } from "./data";
 
@@ -12,9 +13,13 @@ const DashboardOptions = () => {
       <OptionTitle>Looking for something else?</OptionTitle>
       <OptionsList>
         {optionsData.map((option, index) => (
-          <OptionItem key={index} href={option.href}>
+          <OptionItem
+            key={index}
+            onClick={() => option.onClick?.()}
+            type="button"
+          >
             <option.icon size={20} />
-            {option.title}
+            <OptionContent>{option.title}</OptionContent>
           </OptionItem>
         ))}
       </OptionsList>

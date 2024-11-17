@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const OtherOptions = styled.div`
+export const OtherOptions = styled.section`
   background: white;
   border-radius: 12px;
   border: 1px solid #eaeaea;
@@ -19,13 +19,17 @@ export const OptionsList = styled.div`
   flex-direction: column;
 `;
 
-export const OptionItem = styled.a`
+export const OptionItem = styled.button`
   padding: 16px 24px;
   display: flex;
   align-items: center;
   gap: 12px;
   color: #1a1a1a;
-  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
   transition: background 0.2s;
 
   &:hover {
@@ -35,4 +39,8 @@ export const OptionItem = styled.a`
   &:not(:last-child) {
     border-bottom: 1px solid #eaeaea;
   }
+`;
+
+export const OptionContent = styled.span`
+  font-size: 1rem;
 `;

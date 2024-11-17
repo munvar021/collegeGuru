@@ -185,3 +185,33 @@ export const SubmitButton = styled.button`
     font-size: 0.875rem;
   }
 `;
+
+export const StatusMessage = styled.div`
+  text-align: center;
+  margin: ${({ $type }) => ($type === "info" ? "0.5rem 0" : "1rem 0")};
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  font-size: ${({ $type }) => ($type === "info" ? "0.875rem" : "1rem")};
+  color: ${({ $type }) => {
+    switch ($type) {
+      case "success":
+        return "#059669";
+      case "error":
+        return "#DC2626";
+      case "info":
+      default:
+        return "#4B5563";
+    }
+  }};
+  background-color: ${({ $type }) => {
+    switch ($type) {
+      case "success":
+        return "#ECFDF5";
+      case "error":
+        return "#FEE2E2";
+      case "info":
+      default:
+        return "transparent";
+    }
+  }};
+`;

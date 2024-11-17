@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProfileContainer = styled.div`
+export const ProfileContainer = styled.main`
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
@@ -31,7 +31,7 @@ export const PageTitle = styled.h1`
   }
 `;
 
-export const TabContainer = styled.div`
+export const TabContainer = styled.nav`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -52,7 +52,7 @@ export const Tab = styled.button`
   padding: 0.75rem 1rem;
   width: 100%;
   border: none;
-  background: ${(props) => (props.active ? "#f3f4f6" : "transparent")};
+  background: ${({ $isActive }) => ($isActive ? "#f3f4f6" : "transparent")};
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -70,7 +70,7 @@ export const Tab = styled.button`
       left: 0;
       width: 100%;
       height: 2px;
-      background: ${(props) => (props.active ? "#2563eb" : "transparent")};
+      background: ${({ $isActive }) => ($isActive ? "#2563eb" : "transparent")};
       transition: all 0.2s ease;
     }
   }
@@ -79,7 +79,7 @@ export const Tab = styled.button`
     background: #f3f4f6;
 
     @media (min-width: 640px) {
-      background: ${(props) => (props.active ? "#f3f4f6" : "#f8fafc")};
+      background: ${({ $isActive }) => ($isActive ? "#f3f4f6" : "#f8fafc")};
     }
   }
 `;
@@ -87,7 +87,7 @@ export const Tab = styled.button`
 export const TabIcon = styled.span`
   display: flex;
   align-items: center;
-  color: ${(props) => (props.active ? "#2563eb" : "#64748b")};
+  color: ${({ $isActive }) => ($isActive ? "#2563eb" : "#64748b")};
   transition: color 0.2s ease;
 
   ${Tab}:hover & {
@@ -98,7 +98,7 @@ export const TabIcon = styled.span`
 export const TabText = styled.span`
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${(props) => (props.active ? "#2563eb" : "#64748b")};
+  color: ${({ $isActive }) => ($isActive ? "#2563eb" : "#64748b")};
   transition: color 0.2s ease;
 
   @media (min-width: 640px) {
@@ -110,7 +110,7 @@ export const TabText = styled.span`
   }
 `;
 
-export const ContentWrapper = styled.div`
+export const ContentWrapper = styled.section`
   background: white;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FormWrapper = styled.div`
+export const FormWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,7 +36,7 @@ export const FormContainer = styled.form`
   }
 `;
 
-export const FormTitle = styled.h2`
+export const FormTitle = styled.h1`
   font-size: 1.25rem;
   font-weight: 600;
   color: #1e293b;
@@ -49,11 +49,14 @@ export const FormTitle = styled.h2`
   }
 `;
 
-export const FormGroup = styled.div`
+export const FormGroup = styled.fieldset`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
 `;
 
 export const Label = styled.label`
@@ -90,34 +93,6 @@ export const Input = styled.input`
 
   &::placeholder {
     color: #9ca3af;
-  }
-
-  @media (max-width: 640px) {
-    padding: 0.625rem;
-    font-size: 0.875rem;
-  }
-`;
-
-export const Select = styled.select`
-  padding: 0.75rem;
-  border: 1px solid ${(props) => (props.$hasError ? "#ef4444" : "#e5e7eb")};
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  width: 100%;
-  background-color: #ffffff;
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  &:hover {
-    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#d1d5db")};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#2563eb")};
-    box-shadow: 0 0 0 3px
-      ${(props) =>
-        props.$hasError ? "rgba(239, 68, 68, 0.2)" : "rgba(37, 99, 235, 0.2)"};
   }
 
   @media (max-width: 640px) {
@@ -167,4 +142,18 @@ export const SubmitButton = styled.button`
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
   }
+`;
+
+export const StatusMessage = styled.div`
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: ${(props) => (props.$type === "success" ? "#059669" : "#DC2626")};
+`;
+
+export const LastSaved = styled.div`
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  text-align: center;
 `;

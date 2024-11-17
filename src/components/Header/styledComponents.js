@@ -13,7 +13,7 @@ export const HeaderContainer = styled.header`
   right: 0;
   z-index: 1000;
   box-shadow: ${(props) =>
-    props.scrolled ? "0 2px 4px rgba(0,0,0,0.1)" : "none"};
+    props.$scrolled ? "0 2px 4px rgba(0,0,0,0.1)" : "none"};
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -45,7 +45,7 @@ export const Nav = styled.nav`
   gap: 2rem;
 
   @media (max-width: 768px) {
-    display: none; // Hide on smaller screens
+    display: none;
   }
 `;
 
@@ -89,14 +89,14 @@ export const NavToggle = styled.button`
   }
 
   .rotate {
-    transform: rotate(180deg); /* Rotate the icon */
-    transition: transform 0.3s ease; /* Smooth transition */
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
   }
 `;
 
-export const PopupNav = styled.div`
+export const PopupNav = styled.nav`
   position: absolute;
-  top: 60px; // Adjust based on header height
+  top: 60px;
   left: 0;
   background-color: #0a0633;
   width: 100%;
@@ -145,25 +145,29 @@ export const CartCount = styled.span`
   border-radius: 50%;
 `;
 
+export const SearchForm = styled.form`
+  width: 100%;
+`;
+
 export const SearchBar = styled.input`
-  padding: 0.25rem;
-  border: none;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  margin-left: 0.5rem;
-  transition: width 0.3s ease;
+  font-size: 1rem;
 
   &:focus {
     outline: none;
-    width: 200px;
+    border-color: #6b5ce7;
   }
 `;
 
 export const SearchPopup = styled.div`
   position: absolute;
-  top: 60px; // Adjust based on header height
+  top: 60px;
   right: 0;
   background-color: #fff;
-  width: 250px; // Set width for the search popup
+  width: 250px;
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

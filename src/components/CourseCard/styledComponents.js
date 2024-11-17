@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+export const MetaItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+
+  svg {
+    color: #4b5563;
+  }
+`;
+
 export const Card = styled.div`
   background: white;
   border-radius: 16px;

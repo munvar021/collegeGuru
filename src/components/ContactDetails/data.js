@@ -28,3 +28,35 @@ export const stateOptions = [
   { value: "Uttarakhand", label: "Uttarakhand" },
   { value: "West Bengal", label: "West Bengal" },
 ];
+
+export const FORM_VALIDATION_RULES = {
+  mobile: {
+    required: "Mobile number is required",
+    pattern: {
+      value: /^\d{10}$/,
+      message: "Please enter a valid 10-digit mobile number",
+    },
+  },
+  email: {
+    required: "Email is required",
+    pattern: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "Please enter a valid email address",
+    },
+    maxLength: {
+      value: 100,
+      message: "Email address is too long (maximum 100 characters)",
+    },
+  },
+  city: {
+    required: "City is required",
+    pattern: {
+      value: /^[a-zA-Z\s]{2,50}$/,
+      message:
+        "City name should only contain letters and spaces (2-50 characters)",
+    },
+  },
+  state: {
+    required: "State is required",
+  },
+};
