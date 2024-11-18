@@ -1,4 +1,3 @@
-// theme.js
 export const theme = {
   colors: {
     primary: "#3b82f6",
