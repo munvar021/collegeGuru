@@ -4,8 +4,9 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./styles/GlobalStyles";
 import Header from "./components/Header/header";
 import Sidebar from "./components/Sidebar/sidebar";
-import Courses from "./pages/Courses/courses";
 import ExamDashboard from "./pages/ExamDashboard/examDashboard";
+import Courses from "./pages/Courses/courses";
+import LatestUpdates from "./pages/LatestUpdates/latestUpdates";
 import Dashboard from "./pages/Dashboard/dashboard";
 import Profile from "./pages/Profile/profile";
 import Documents from "./pages/Documents/documents";
@@ -38,8 +39,9 @@ const App = () => {
           <Sidebar isOpen={isSidebarOpen} />
           <MainContent>
             <Routes>
-              <Route exact path="/courses" element={<Courses />} />
               <Route exact path="/exam" element={<ExamDashboard />} />
+              <Route exact path="/courses" element={<Courses />} />
+              <Route exact path="/updates" element={<LatestUpdates />} />
               <Route exact path="/dashboard" element={<Dashboard />} />
               <Route exact path="/profile" element={<Profile />} />
               <Route exact path="/documents" element={<Documents />} />
