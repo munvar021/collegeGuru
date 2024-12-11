@@ -1,168 +1,202 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
+import { FiEdit2 } from "react-icons/fi";
+import { educationFormFields } from "./data";
 import {
-  formFields,
-  boardOptions,
-  marksTypeOptions,
-  graduationTypeOptions,
-  generateYearOptions,
-} from "./data";
-import { formConfig } from "./data";
-import {
-  FormWrapper,
-  FormContainer,
-  EducationSection,
-  EducationGrid,
+  Container,
+  Card,
+  Header,
+  Title,
+  Grid,
+  Field,
+  Label,
+  Value,
+  Modal,
+  ModalContent,
+  Form,
   FormGroup,
   Input,
-  Select,
-  Label,
+  Error,
+  ButtonGroup,
+  Button,
+  SelectWrapper,
   SectionTitle,
-  ErrorMessage,
-  SubmitButton,
-  StatusMessage,
+  Divider,
+  EditButton,
 } from "./styledComponents";
 
 const EducationDetails = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    classX: {},
+    classXII: {},
+    graduation: {},
+  });
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    control,
+    formState: { errors },
+    reset,
   } = useForm({
-    defaultValues: formConfig.defaultValues,
+    defaultValues: formData,
   });
 
-  const [formState, setFormState] = React.useState({
-    status: {
-      message: "",
-      type: "",
-      lastSaved: "",
-    },
-  });
+  const onSubmit = (data) => {
+    const formattedData = Object.keys(data).reduce((acc, section) => {
+      acc[section] = Object.keys(data[section]).reduce((sectionAcc, field) => {
+        const value = data[section][field];
+        sectionAcc[field] = value?.label || value;
+        return sectionAcc;
+      }, {});
+      return acc;
+    }, {});
 
-  const yearOptions = React.useMemo(() => generateYearOptions(), []);
+    console.log("Education Details Form Submitted:", {
+      rawData: data,
+      formattedData: formattedData,
+      timestamp: new Date().toISOString(),
+      section: "education",
+    });
 
-  const optionsMap = React.useMemo(
-    () => ({
-      boardOptions,
-      marksTypeOptions,
-      graduationTypeOptions,
-      yearOptions,
-    }),
-    [yearOptions]
-  );
-
-  const getOptionsForField = React.useCallback(
-    (optionsName) => optionsMap[optionsName] || [],
-    [optionsMap]
-  );
-
-  const handleFormSubmit = async (data) => {
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Form Data Submitted:", data);
-
-      setFormState((prev) => ({
-        ...prev,
-        status: {
-          message: "Successfully saved education details!",
-          type: "success",
-          lastSaved: new Date().toLocaleString(),
-        },
-      }));
-    } catch (error) {
-      console.error("Submission Error:", error);
-      setFormState((prev) => ({
-        ...prev,
-        status: {
-          message: "Error saving education details",
-          type: "error",
-          lastSaved: "",
-        },
-      }));
-    }
+    setFormData(formattedData);
+    setIsEditing(false);
   };
 
-  const renderField = React.useCallback(
-    (field, section) => (
-      <FormGroup key={field.name}>
-        <Label htmlFor={`${section}.${field.name}`}>{field.label}</Label>
-        {field.type === "select" ? (
-          <Select
-            id={`${section}.${field.name}`}
-            $hasError={!!errors[section]?.[field.name]}
-            {...register(`${section}.${field.name}`, {
-              required: field.required,
-              validate: field.validate,
-            })}
-          >
-            <option value="">{`Select ${field.label}`}</option>
-            {getOptionsForField(field.options).map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
-        ) : (
-          <Input
-            id={`${section}.${field.name}`}
-            type={field.type}
-            $hasError={!!errors[section]?.[field.name]}
-            {...register(`${section}.${field.name}`, {
-              required: field.required,
-              maxLength: field.maxLength,
-              validate: field.validate,
-            })}
-            step={field.type === "number" ? "0.01" : undefined}
-          />
-        )}
-        {errors[section]?.[field.name] && (
-          <ErrorMessage role="alert">
-            {errors[section][field.name].message}
-          </ErrorMessage>
-        )}
-      </FormGroup>
-    ),
-    [errors, getOptionsForField, register]
+  const handleCancel = () => {
+    console.log("Education Details Edit Cancelled:", {
+      timestamp: new Date().toISOString(),
+      section: "education",
+    });
+    reset(formData);
+    setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    console.log("Education Details Edit Mode Activated:", {
+      timestamp: new Date().toISOString(),
+      section: "education",
+      currentData: formData,
+    });
+    setIsEditing(true);
+  };
+
+  const renderField = (section, field) => (
+    <Field key={field.id}>
+      <Label>{field.label}</Label>
+      <Value>{formData[section]?.[field.id] || "N/A"}</Value>
+    </Field>
   );
 
-  const renderEducationSection = React.useCallback(
-    (title, section) => (
-      <EducationSection key={section}>
-        <SectionTitle>{title}</SectionTitle>
-        <EducationGrid>
-          {formFields[section].map((field) => renderField(field, section))}
-        </EducationGrid>
-      </EducationSection>
-    ),
-    [renderField]
+  const renderFormField = (section, field) => (
+    <FormGroup key={field.id}>
+      <Label>{field.label}</Label>
+      {field.type === "select" ? (
+        <Controller
+          name={`${section}.${field.id}`}
+          control={control}
+          rules={field.validation}
+          render={({ field: { onChange, value } }) => (
+            <SelectWrapper>
+              <Select
+                options={field.options}
+                value={value}
+                onChange={onChange}
+                isSearchable
+                className="react-select"
+                classNamePrefix="react-select"
+                placeholder={`Select ${field.label}`}
+              />
+            </SelectWrapper>
+          )}
+        />
+      ) : (
+        <Input
+          type={field.type}
+          {...register(`${section}.${field.id}`, field.validation)}
+        />
+      )}
+      {errors[section]?.[field.id] && (
+        <Error>{errors[section][field.id].message}</Error>
+      )}
+    </FormGroup>
+  );
+
+  const renderSection = (section, title, fields) => (
+    <div key={section}>
+      <SectionTitle>{title}</SectionTitle>
+      <Grid>
+        {!isEditing
+          ? fields.map((field) => renderField(section, field))
+          : fields.map((field) => renderFormField(section, field))}
+      </Grid>
+      {section !== "graduation" && <Divider />}
+    </div>
   );
 
   return (
-    <FormWrapper>
-      <FormContainer onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-        {Object.entries(formConfig.sections).map(([section, title]) =>
-          renderEducationSection(title, section)
-        )}
+    <Container>
+      <Card>
+        <Header>
+          <Title>Education Details</Title>
+          {!isEditing && (
+            <EditButton
+              onClick={handleEditClick}
+              aria-label="Edit education details"
+            >
+              <FiEdit2 />
+            </EditButton>
+          )}
+        </Header>
 
-        {formState.status.message && (
-          <StatusMessage $type={formState.status.type} role="status">
-            {formState.status.message}
-          </StatusMessage>
+        {!isEditing ? (
+          <>
+            {renderSection("classX", "Class X", educationFormFields.classX)}
+            {renderSection(
+              "classXII",
+              "Class XII",
+              educationFormFields.classXII
+            )}
+            {renderSection(
+              "graduation",
+              "Graduation",
+              educationFormFields.graduation
+            )}
+          </>
+        ) : (
+          <Modal>
+            <ModalContent>
+              <Title>Edit Education Details</Title>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                {renderSection("classX", "Class X", educationFormFields.classX)}
+                {renderSection(
+                  "classXII",
+                  "Class XII",
+                  educationFormFields.classXII
+                )}
+                {renderSection(
+                  "graduation",
+                  "Graduation",
+                  educationFormFields.graduation
+                )}
+                <ButtonGroup>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Changes</Button>
+                </ButtonGroup>
+              </Form>
+            </ModalContent>
+          </Modal>
         )}
-
-        <SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Education Details"}
-        </SubmitButton>
-
-        {formState.status.lastSaved && (
-          <StatusMessage $type="info">
-            Last saved: {formState.status.lastSaved}
-          </StatusMessage>
-        )}
-      </FormContainer>
-    </FormWrapper>
+      </Card>
+    </Container>
   );
 };
 

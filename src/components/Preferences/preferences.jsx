@@ -1,210 +1,144 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FORM_OPTIONS } from "./data";
-import { preferenceSchema } from "./formSchema";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
+import { FiEdit2 } from "react-icons/fi";
+import { preferencesFormFields } from "./data";
 import {
-  PreferenceContainer,
-  PreferenceSection,
-  SectionTitle,
-  PreferenceGrid,
-  FormGroup,
+  Container,
+  Card,
+  Header,
+  Title,
+  Grid,
+  Field,
   Label,
-  Select,
+  Value,
+  Modal,
+  ModalContent,
+  Form,
+  FormGroup,
+  Error,
+  ButtonGroup,
   Button,
-  ButtonContainer,
-  WarningText,
+  EditButton,
   SelectWrapper,
-  FormContainer,
-  LoadingOverlay,
-  ErrorContainer,
-  SuccessContainer,
-  ValidationIcon,
-  HelperText,
 } from "./styledComponents";
 
 const Preferences = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting, touchedFields },
-    setError,
-    clearErrors,
-  } = useForm({
-    resolver: yupResolver(preferenceSchema),
-    defaultValues: {
-      academic: {
-        courseType: "",
-        studyMode: "",
-        preferredLocation: "",
-        budgetRange: "",
-        interestedFields: "",
-        admissionTimeline: "",
-      },
-      communication: {
-        preferredLanguage: "",
-        communicationMode: "",
-        counselingPreference: "",
-        responseTime: "",
-      },
-    },
-  });
-
-  const [formStatus, setFormStatus] = React.useState({
-    success: false,
-    error: false,
-    message: "",
-    lastSaved: null,
-  });
-
-  const onSubmit = async (data) => {
-    try {
-      setFormStatus((prev) => ({ ...prev, success: false, error: false }));
-
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const timestamp = new Date().toLocaleString();
-      setFormStatus({
-        success: true,
-        error: false,
-        message: "Preferences saved successfully!",
-        lastSaved: timestamp,
-      });
-
-      console.log("User Preferences Submitted:", {
-        ...data,
-        timestamp,
-        status: "Success",
-      });
-    } catch (error) {
-      setFormStatus({
-        success: false,
-        error: true,
-        message: "Failed to save preferences. Please try again.",
-        lastSaved: null,
-      });
-    }
-  };
-
-  const handleReset = () => {
-    reset();
-    setFormStatus({
-      success: false,
-      error: false,
-      message: "",
-      lastSaved: null,
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState(() => {
+    const initialData = {};
+    preferencesFormFields.forEach((field) => {
+      initialData[field.id] = field.defaultValue || "";
     });
-    console.log("Form reset to default values");
+    return initialData;
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: formData,
+  });
+
+  const onSubmit = (data) => {
+    console.log("Preferences Form Submitted:", {
+      rawData: data,
+      formattedData: Object.keys(data).reduce((acc, key) => {
+        acc[key] = data[key]?.label || data[key];
+        return acc;
+      }, {}),
+      timestamp: new Date().toISOString(),
+    });
+
+    setFormData(data);
+    setIsEditing(false);
   };
 
-  const renderSelect = (category, field, options, label) => (
-    <FormGroup>
-      <Label>{label}</Label>
-      <SelectWrapper>
-        <Select
-          {...register(`${category}.${field}`)}
-          hasError={!!errors[category]?.[field]}
-        >
-          <option value="">Select {label}</option>
-          {options.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </Select>
-        {errors[category]?.[field] && (
-          <WarningText>{errors[category][field].message}</WarningText>
+  const handleCancel = () => {
+    console.log("Preferences Edit Cancelled:", {
+      timestamp: new Date().toISOString(),
+    });
+    reset(formData);
+    setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    console.log("Preferences Edit Mode Activated:", {
+      timestamp: new Date().toISOString(),
+    });
+    setIsEditing(true);
+  };
+
+  const renderField = (field) => (
+    <Field key={field.id}>
+      <Label>{field.label}</Label>
+      <Value>{formData[field.id]?.label || "N/A"}</Value>
+    </Field>
+  );
+
+  const renderFormField = (field) => (
+    <FormGroup key={field.id}>
+      <Label>{field.label}</Label>
+      <Controller
+        name={field.id}
+        control={control}
+        rules={field.validation}
+        render={({ field: { onChange, value } }) => (
+          <SelectWrapper>
+            <Select
+              options={field.options}
+              value={value}
+              onChange={onChange}
+              isSearchable
+              className="react-select"
+              classNamePrefix="react-select"
+              placeholder={`Select ${field.label}`}
+            />
+          </SelectWrapper>
         )}
-        {touchedFields[category]?.[field] && !errors[category]?.[field] && (
-          <ValidationIcon isValid={true}>✓</ValidationIcon>
-        )}
-      </SelectWrapper>
+      />
+      {errors[field.id] && <Error>{errors[field.id].message}</Error>}
     </FormGroup>
   );
 
   return (
-    <PreferenceContainer>
-      <FormContainer>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {isSubmitting && (
-            <LoadingOverlay>
-              <div>Saving preferences...</div>
-            </LoadingOverlay>
+    <Container>
+      <Card>
+        <Header>
+          <Title>Preferences</Title>
+          {!isEditing && (
+            <EditButton onClick={handleEditClick} aria-label="Edit preferences">
+              <FiEdit2 />
+            </EditButton>
           )}
+        </Header>
 
-          {formStatus.error && (
-            <ErrorContainer>{formStatus.message}</ErrorContainer>
-          )}
-
-          {formStatus.success && (
-            <SuccessContainer>{formStatus.message}</SuccessContainer>
-          )}
-
-          <PreferenceSection>
-            <SectionTitle>Academic Preferences</SectionTitle>
-            <PreferenceGrid>
-              {renderSelect(
-                "academic",
-                "courseType",
-                FORM_OPTIONS.courseTypes,
-                "Course Type"
-              )}
-              {renderSelect(
-                "academic",
-                "studyMode",
-                FORM_OPTIONS.studyModes,
-                "Study Mode"
-              )}
-              {renderSelect(
-                "academic",
-                "preferredLocation",
-                FORM_OPTIONS.locations,
-                "Preferred Location"
-              )}
-              {renderSelect(
-                "academic",
-                "budgetRange",
-                FORM_OPTIONS.budgetRanges,
-                "Budget Range"
-              )}
-            </PreferenceGrid>
-          </PreferenceSection>
-
-          <PreferenceSection>
-            <SectionTitle>Communication Preferences</SectionTitle>
-            <PreferenceGrid>
-              {renderSelect(
-                "communication",
-                "preferredLanguage",
-                FORM_OPTIONS.languages,
-                "Preferred Language"
-              )}
-              {renderSelect(
-                "communication",
-                "communicationMode",
-                FORM_OPTIONS.communicationModes,
-                "Communication Mode"
-              )}
-            </PreferenceGrid>
-          </PreferenceSection>
-
-          <ButtonContainer>
-            <Button type="button" onClick={handleReset}>
-              Reset Preferences
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Preferences"}
-            </Button>
-          </ButtonContainer>
-
-          {formStatus.lastSaved && (
-            <HelperText>Last saved: {formStatus.lastSaved}</HelperText>
-          )}
-        </form>
-      </FormContainer>
-    </PreferenceContainer>
+        {!isEditing ? (
+          <Grid>{preferencesFormFields.map(renderField)}</Grid>
+        ) : (
+          <Modal>
+            <ModalContent>
+              <Title>Edit Preferences</Title>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                {preferencesFormFields.map(renderFormField)}
+                <ButtonGroup>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Changes</Button>
+                </ButtonGroup>
+              </Form>
+            </ModalContent>
+          </Modal>
+        )}
+      </Card>
+    </Container>
   );
 };
 

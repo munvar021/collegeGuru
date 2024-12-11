@@ -1,203 +1,204 @@
-export const boardOptions = [
+export const boards = [
   { value: "cbse", label: "CBSE" },
-  { value: "icse", label: "ICSE" },
   { value: "state", label: "State Board" },
+  { value: "icse", label: "ICSE" },
+  { value: "igcse", label: "IGCSE" },
 ];
 
-export const marksTypeOptions = [
+export const streams = [
+  { value: "science", label: "Science" },
+  { value: "commerce", label: "Commerce" },
+  { value: "arts", label: "Arts" },
+];
+
+export const marksTypes = [
   { value: "percentage", label: "Percentage" },
   { value: "cgpa", label: "CGPA" },
 ];
 
-export const graduationTypeOptions = [
-  { value: "undergraduate", label: "Under Graduate" },
-  { value: "postgraduate", label: "Post Graduate" },
-  { value: "doctorate", label: "Doctorate" },
-  { value: "diploma", label: "Diploma" },
+export const degrees = [
+  { value: "be", label: "B.E/B.Tech" },
+  { value: "bsc", label: "B.Sc" },
+  { value: "bcom", label: "B.Com" },
+  { value: "ba", label: "B.A" },
+  { value: "bba", label: "BBA" },
 ];
 
-export const generateYearOptions = () => {
-  return Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map(
-    (year) => ({
-      value: year.toString(),
-      label: year.toString(),
-    })
-  );
-};
+const currentYear = new Date().getFullYear();
+const startYear = 1990;
+const futureYears = 4;
 
-export const formFields = {
-  class_x: [
+export const years = Array.from(
+  { length: currentYear - startYear + 1 + futureYears },
+  (_, i) => ({
+    value: String(startYear + i),
+    label: String(startYear + i),
+  })
+);
+
+export const graduationYears = Array.from(
+  { length: currentYear - startYear + 1 + futureYears },
+  (_, i) => {
+    const year = startYear + i;
+    const isFutureYear = year > currentYear;
+    return {
+      value: String(year),
+      label: `${year}${isFutureYear ? " (Expected)" : ""}`,
+      isFuture: isFutureYear,
+    };
+  }
+);
+
+export const educationFormFields = {
+  classX: [
     {
-      name: "board",
+      id: "board",
       label: "Board",
       type: "select",
-      options: "boardOptions",
-      required: "Board is required",
+      options: boards,
+      validation: { required: "Board is required" },
     },
     {
-      name: "school",
-      label: "School Name",
+      id: "school",
+      label: "School",
       type: "text",
-      required: "School name is required",
-      maxLength: {
-        value: 100,
-        message: "School name must be less than 100 characters",
+      validation: { required: "School name is required" },
+    },
+    {
+      id: "passingYear",
+      label: "Passing Year",
+      type: "select",
+      options: years,
+      validation: {
+        required: "Passing year is required",
+        validate: (value) => {
+          const year = parseInt(value.value);
+          return (
+            year <= currentYear ||
+            "Cannot select future year for past education"
+          );
+        },
       },
     },
     {
-      name: "passingYear",
-      label: "Passing Year",
-      type: "select",
-      options: "yearOptions",
-      required: "Passing year is required",
-    },
-    {
-      name: "marksType",
+      id: "marksType",
       label: "Marks Type",
       type: "select",
-      options: "marksTypeOptions",
-      required: "Marks type is required",
+      options: marksTypes,
+      validation: { required: "Marks type is required" },
     },
     {
-      name: "percentage",
-      label: "Percentage/CGPA",
+      id: "percentage",
+      label: "Percentage/ CGPA",
       type: "number",
-      required: "Percentage/CGPA is required",
-      validate: {
-        range: (v) =>
-          (parseFloat(v) >= 0 && parseFloat(v) <= 100) ||
-          "Please enter a valid percentage between 0 and 100",
+      validation: {
+        required: "Percentage/CGPA is required",
+        validate: (value) =>
+          (value >= 0 && value <= 100) ||
+          "Please enter a valid percentage/CGPA",
       },
     },
   ],
-  class_xii: [
+  classXII: [
     {
-      name: "board",
+      id: "board",
       label: "Board",
       type: "select",
-      options: "boardOptions",
-      required: "Board is required",
+      options: boards,
+      validation: { required: "Board is required" },
     },
     {
-      name: "school",
-      label: "School Name",
+      id: "school",
+      label: "School",
       type: "text",
-      required: "School name is required",
-      maxLength: {
-        value: 100,
-        message: "School name must be less than 100 characters",
+      validation: { required: "School name is required" },
+    },
+    {
+      id: "passingYear",
+      label: "Passing Year",
+      type: "select",
+      options: years,
+      validation: {
+        required: "Passing year is required",
+        validate: (value) => {
+          const year = parseInt(value.value);
+          return (
+            year <= currentYear ||
+            "Cannot select future year for past education"
+          );
+        },
       },
     },
     {
-      name: "passingYear",
-      label: "Passing Year",
+      id: "stream",
+      label: "Stream",
       type: "select",
-      options: "yearOptions",
-      required: "Passing year is required",
+      options: streams,
+      validation: { required: "Stream is required" },
     },
     {
-      name: "marksType",
+      id: "marksType",
       label: "Marks Type",
       type: "select",
-      options: "marksTypeOptions",
-      required: "Marks type is required",
+      options: marksTypes,
+      validation: { required: "Marks type is required" },
     },
     {
-      name: "percentage",
-      label: "Percentage/CGPA",
+      id: "percentage",
+      label: "Percentage/ CGPA",
       type: "number",
-      required: "Percentage/CGPA is required",
-      validate: {
-        range: (v) =>
-          (parseFloat(v) >= 0 && parseFloat(v) <= 100) ||
-          "Please enter a valid percentage between 0 and 100",
+      validation: {
+        required: "Percentage/CGPA is required",
+        validate: (value) =>
+          (value >= 0 && value <= 100) ||
+          "Please enter a valid percentage/CGPA",
       },
     },
   ],
   graduation: [
     {
-      name: "graduationType",
-      label: "Degree Level",
-      type: "select",
-      options: "graduationTypeOptions",
-      required: "Degree level is required",
-    },
-    {
-      name: "college",
-      label: "College Name",
+      id: "college",
+      label: "College",
       type: "text",
-      required: "College name is required",
-      maxLength: {
-        value: 100,
-        message: "College name must be less than 100 characters",
-      },
+      validation: { required: "College name is required" },
     },
     {
-      name: "degree",
-      label: "Degree",
-      type: "text",
-      required: "Degree is required",
-      maxLength: {
-        value: 100,
-        message: "Degree must be less than 100 characters",
-      },
-    },
-    {
-      name: "passingYear",
+      id: "passingYear",
       label: "Passing Year",
       type: "select",
-      options: "yearOptions",
-      required: "Passing year is required",
+      options: graduationYears,
+      validation: {
+        required: "Passing year is required",
+      },
     },
     {
-      name: "marksType",
+      id: "degree",
+      label: "Degree",
+      type: "select",
+      options: degrees,
+      validation: { required: "Degree is required" },
+    },
+    {
+      id: "marksType",
       label: "Marks Type",
       type: "select",
-      options: "marksTypeOptions",
-      required: "Marks type is required",
+      options: marksTypes,
+      validation: { required: "Marks type is required" },
     },
     {
-      name: "percentage",
-      label: "Percentage/CGPA",
+      id: "percentage",
+      label: "Percentage/ CGPA",
       type: "number",
-      required: "Percentage/CGPA is required",
-      validate: {
-        range: (v) =>
-          (parseFloat(v) >= 0 && parseFloat(v) <= 100) ||
-          "Please enter a valid percentage between 0 and 100",
+      validation: {
+        required: "Percentage/CGPA is required",
+        validate: (value, formValues) => {
+          if (!value || Number.isNaN(value))
+            return "Please enter a valid number";
+          if (value < 0 || value > 100)
+            return "Please enter a valid percentage/CGPA";
+          return true;
+        },
       },
     },
   ],
-};
-
-export const formConfig = {
-  defaultValues: {
-    class_x: {
-      board: "",
-      school: "",
-      passingYear: "",
-      marksType: "",
-      percentage: "",
-    },
-    class_xii: {
-      board: "",
-      school: "",
-      passingYear: "",
-      marksType: "",
-      percentage: "",
-    },
-    graduation: {
-      college: "",
-      passingYear: "",
-      degree: "",
-      graduationType: "",
-      marksType: "",
-      percentage: "",
-    },
-  },
-  sections: {
-    class_x: "Class X Details",
-    class_xii: "Class XII Details",
-    graduation: "Graduation Details",
-  },
 };

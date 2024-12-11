@@ -1,227 +1,304 @@
 import styled from "styled-components";
 
-export const PreferenceContainer = styled.div`
+const theme = {
+  primary: "#1a237e",
+  secondary: "#f5f5f5",
+  error: "#d32f2f",
+  border: "#ddd",
+  text: {
+    primary: "#333",
+    secondary: "#666",
+    light: "#999",
+  },
+  background: {
+    main: "#fff",
+    overlay: "rgba(0, 0, 0, 0.5)",
+  },
+};
+
+export const Container = styled.div`
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
-
-  &:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-      0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    margin: 1rem;
+    padding: 16px;
   }
 `;
 
-export const FormContainer = styled.div`
-  position: relative;
-  padding: 2rem;
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
-`;
-
-export const PreferenceSection = styled.section`
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  background: #ffffff;
+export const Card = styled.div`
+  background: ${theme.background.main};
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: #d1d5db;
-  }
-`;
-
-export const SectionTitle = styled.h2`
-  font-size: 1.5rem;
-  color: #111827;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin: 10px 0;
 
   @media (max-width: 768px) {
-    font-size: 1.25rem;
+    padding: 16px;
+    margin: 16px 0;
   }
 `;
 
-export const PreferenceGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  align-items: start;
+export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid ${theme.border};
+`;
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+export const Title = styled.h2`
+  color: ${theme.primary};
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
   }
+`;
+
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+`;
+
+export const Field = styled.div`
+  margin-bottom: 16px;
+  break-inside: avoid;
+`;
+
+export const Label = styled.div`
+  color: ${theme.text.secondary};
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+`;
+
+export const Value = styled.div`
+  color: ${theme.text.primary};
+  font-size: 16px;
+  font-weight: 500;
+  word-break: break-word;
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${theme.background.overlay};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+export const ModalContent = styled.div`
+  background: ${theme.background.main};
+  padding: 32px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    width: 95%;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${theme.secondary};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${theme.text.light};
+    border-radius: 4px;
+  }
+`;
+
+export const Form = styled.form`
+  display: grid;
+  gap: 20px;
 `;
 
 export const FormGroup = styled.div`
-  margin-bottom: 1rem;
-`;
-
-export const Label = styled.label`
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.5rem;
-`;
-
-export const SelectWrapper = styled.div`
-  position: relative;
-`;
-
-export const Select = styled.select`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  border: 1px solid ${(props) => (props.hasError ? "#ef4444" : "#d1d5db")};
-  background-color: #ffffff;
-  font-size: 0.875rem;
-  color: #111827;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1rem;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: #9ca3af;
-  }
-
-  &:focus {
-    outline: none;
-    ring: 2px;
-    ring-offset: 2px;
-    ring-color: #3b82f6;
-    border-color: #3b82f6;
-  }
-
-  &:disabled {
-    background-color: #f3f4f6;
-    cursor: not-allowed;
-  }
-`;
-
-export const ButtonContainer = styled.div`
   display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
+  flex-direction: column;
+  gap: 8px;
+`;
 
-  @media (max-width: 640px) {
+export const Error = styled.span`
+  color: ${theme.error};
+  font-size: 12px;
+  margin-top: 4px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+
+  @media (max-width: 768px) {
     flex-direction: column;
+    margin-top: 24px;
   }
 `;
 
 export const Button = styled.button`
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
   font-weight: 500;
-  font-size: 0.875rem;
+  cursor: pointer;
+  border: none;
   transition: all 0.2s ease;
+  min-width: 100px;
 
-  ${(props) =>
-    props.type === "submit"
-      ? `
-    background-color: #3b82f6;
-    color: #ffffff;
-    border: none;
+  background: ${(props) =>
+    props.variant === "secondary" ? theme.secondary : theme.primary};
+  color: ${(props) =>
+    props.variant === "secondary" ? theme.text.primary : theme.background.main};
 
-    &:hover {
-      background-color: #2563eb;
-    }
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
 
-    &:disabled {
-      background-color: #93c5fd;
-      cursor: not-allowed;
-    }
-  `
-      : `
-    background-color: #ffffff;
-    color: #374151;
-    border: 1px solid #d1d5db;
+  &:active {
+    transform: translateY(0);
+  }
 
-    &:hover {
-      background-color: #f3f4f6;
-      border-color: #9ca3af;
-    }
-  `}
-
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     width: 100%;
+    padding: 12px 16px;
   }
 `;
 
-export const WarningText = styled.span`
-  display: block;
-  color: #ef4444;
-  font-size: 0.75rem;
-  margin-top: 0.5rem;
-`;
-
-export const LoadingOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
+export const EditButton = styled(Button)`
+  padding: 8px;
+  min-width: unset;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  color: #3b82f6;
-  border-radius: 12px;
-  backdrop-filter: blur(2px);
+  background: ${theme.primary};
+  color: white;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
-export const ValidationIcon = styled.span`
-  position: absolute;
-  right: 2.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: ${(props) => (props.isValid ? "#10b981" : "#ef4444")};
-  font-size: 1rem;
-`;
+export const SelectWrapper = styled.div`
+  .react-select__control {
+    border: 1px solid ${theme.border};
+    min-height: 38px;
+    background-color: ${theme.background.main};
 
-export const StatusContainer = styled.div`
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
+    &:hover {
+      border-color: ${theme.primary};
+    }
 
-export const ErrorContainer = styled(StatusContainer)`
-  background-color: #fee2e2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-`;
+    &--is-focused {
+      border-color: ${theme.primary};
+      box-shadow: none;
+    }
 
-export const SuccessContainer = styled(StatusContainer)`
-  background-color: #dcfce7;
-  border: 1px solid #bbf7d0;
-  color: #166534;
-`;
+    &--is-disabled {
+      background-color: ${theme.secondary};
+      cursor: not-allowed;
+    }
+  }
 
-export const HelperText = styled.p`
-  text-align: center;
-  color: #6b7280;
-  font-size: 0.75rem;
-  margin-top: 1rem;
+  .react-select__menu {
+    z-index: 1100;
+    border: 1px solid ${theme.border};
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .react-select__option {
+    padding: 8px 12px;
+    cursor: pointer;
+
+    &--is-selected {
+      background-color: ${theme.primary};
+    }
+
+    &--is-focused {
+      background-color: rgba(26, 35, 126, 0.1);
+    }
+  }
+
+  .react-select__value-container {
+    padding: 2px 8px;
+  }
+
+  .react-select__placeholder {
+    color: ${theme.text.light};
+  }
+
+  .react-select__single-value {
+    color: ${theme.text.primary};
+  }
+
+  .react-select__indicator-separator {
+    background-color: ${theme.border};
+  }
+
+  .react-select__clear-indicator,
+  .react-select__dropdown-indicator {
+    color: ${theme.text.light};
+
+    &:hover {
+      color: ${theme.text.secondary};
+    }
+  }
+
+  .react-select__multi-value {
+    background-color: ${theme.secondary};
+
+    &__label {
+      color: ${theme.text.primary};
+    }
+
+    &__remove:hover {
+      background-color: ${theme.error};
+      color: white;
+    }
+  }
 `;

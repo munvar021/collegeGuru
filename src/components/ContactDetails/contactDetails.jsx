@@ -1,198 +1,166 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
-import { stateOptions, FORM_VALIDATION_RULES } from "./data";
+import { FiEdit2 } from "react-icons/fi";
+import { contactFormFields, states, citiesByState } from "./data";
 import {
-  FormWrapper,
-  FormContainer,
-  FormTitle,
+  Container,
+  Card,
+  Header,
+  Title,
+  Grid,
+  Field,
+  Label,
+  Value,
+  Modal,
+  ModalContent,
+  Form,
   FormGroup,
   Input,
-  Label,
-  ErrorMessage,
-  SubmitButton,
-  StatusMessage,
-  LastSaved,
+  Error,
+  ButtonGroup,
+  Button,
+  SelectWrapper,
+  EditButton,
 } from "./styledComponents";
 
 const ContactDetails = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm({
-    defaultValues: {
-      mobile: "",
-      email: "",
-      city: "",
-      state: null,
-    },
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState(() => {
+    const initialData = {};
+    contactFormFields.forEach((field) => {
+      initialData[field.id] = field.defaultValue || "";
+    });
+    return initialData;
   });
 
-  const [submitStatus, setSubmitStatus] = React.useState(null);
-  const [lastSuccessfulSubmission, setLastSuccessfulSubmission] =
-    React.useState(null);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+    watch,
+  } = useForm({
+    defaultValues: formData,
+  });
 
-  const formatPhoneNumber = (value) => {
-    const digits = value.replace(/\D/g, "");
-    if (digits.length <= 10) {
-      return digits.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  const selectedState = watch("state");
+  const [availableCities, setAvailableCities] = useState([]);
+
+  useEffect(() => {
+    if (selectedState) {
+      setAvailableCities(citiesByState[selectedState.value] || []);
     }
-    return digits.slice(0, 10).replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-  };
+  }, [selectedState]);
 
-  const simulateApiCall = async (data) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          success: true,
-          message: "Contact details saved successfully",
-        });
-      }, 1500);
+  const onSubmit = (data) => {
+    const formattedData = {};
+    Object.keys(data).forEach((key) => {
+      formattedData[key] = data[key]?.label || data[key];
     });
+
+    console.log("Contact Details Form Submitted:", {
+      rawData: data,
+      formattedData: formattedData,
+      timestamp: new Date().toISOString(),
+    });
+
+    setFormData(formattedData);
+    setIsEditing(false);
   };
 
-  const onSubmit = async (data) => {
-    try {
-      await simulateApiCall(data);
-      setSubmitStatus("success");
-      setLastSuccessfulSubmission(new Date().toISOString());
-      console.log("Successful Submission:", data);
-    } catch (error) {
-      setSubmitStatus("error");
-    }
+  const handleCancel = () => {
+    console.log("Contact Details Edit Cancelled:", {
+      timestamp: new Date().toISOString(),
+    });
+    reset(formData);
+    setIsEditing(false);
   };
+
+  const handleEditClick = () => {
+    console.log("Contact Details Edit Mode Activated:", {
+      timestamp: new Date().toISOString(),
+    });
+    setIsEditing(true);
+  };
+
+  const renderField = (field) => (
+    <Field key={field.id}>
+      <Label>{field.label}</Label>
+      <Value>{formData[field.id] || "N/A"}</Value>
+    </Field>
+  );
+
+  const renderFormField = (field) => (
+    <FormGroup key={field.id}>
+      <Label>{field.label}</Label>
+      {field.type === "select" ? (
+        <Controller
+          name={field.id}
+          control={control}
+          rules={field.validation}
+          render={({ field: { onChange, value } }) => (
+            <SelectWrapper>
+              <Select
+                options={field.id === "state" ? states : availableCities}
+                value={value}
+                onChange={onChange}
+                isSearchable
+                className="react-select"
+                classNamePrefix="react-select"
+                placeholder={`Select ${field.label}`}
+                isDisabled={field.id === "city" && !selectedState}
+              />
+            </SelectWrapper>
+          )}
+        />
+      ) : (
+        <Input type={field.type} {...register(field.id, field.validation)} />
+      )}
+      {errors[field.id] && <Error>{errors[field.id].message}</Error>}
+    </FormGroup>
+  );
 
   return (
-    <FormWrapper>
-      <FormContainer
-        onSubmit={handleSubmit(onSubmit)}
-        role="form"
-        aria-label="Contact Details Form"
-      >
-        <FormTitle>Contact Details</FormTitle>
-
-        <FormGroup>
-          <Label htmlFor="mobile">Mobile Number *</Label>
-          <Controller
-            name="mobile"
-            control={control}
-            rules={FORM_VALIDATION_RULES.mobile}
-            render={({ field }) => (
-              <Input
-                {...field}
-                id="mobile"
-                type="tel"
-                placeholder="Enter 10-digit mobile number"
-                $hasError={!!errors.mobile}
-                aria-invalid={!!errors.mobile}
-                onChange={(e) =>
-                  field.onChange(formatPhoneNumber(e.target.value))
-                }
-                maxLength={12}
-              />
-            )}
-          />
-          {errors.mobile && (
-            <ErrorMessage role="alert">{errors.mobile.message}</ErrorMessage>
+    <Container>
+      <Card>
+        <Header>
+          <Title>Contact Details</Title>
+          {!isEditing && (
+            <EditButton
+              onClick={handleEditClick}
+              aria-label="Edit contact details"
+            >
+              <FiEdit2 />
+            </EditButton>
           )}
-        </FormGroup>
+        </Header>
 
-        <FormGroup>
-          <Label htmlFor="email">Email Address *</Label>
-          <Controller
-            name="email"
-            control={control}
-            rules={FORM_VALIDATION_RULES.email}
-            render={({ field }) => (
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                placeholder="Enter your email address"
-                $hasError={!!errors.email}
-                aria-invalid={!!errors.email}
-                maxLength={100}
-              />
-            )}
-          />
-          {errors.email && (
-            <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
-          )}
-        </FormGroup>
-
-        <FormGroup>
-          <Label htmlFor="city">City *</Label>
-          <Controller
-            name="city"
-            control={control}
-            rules={FORM_VALIDATION_RULES.city}
-            render={({ field }) => (
-              <Input
-                {...field}
-                id="city"
-                type="text"
-                placeholder="Enter your city"
-                $hasError={!!errors.city}
-                aria-invalid={!!errors.city}
-                maxLength={50}
-              />
-            )}
-          />
-          {errors.city && (
-            <ErrorMessage role="alert">{errors.city.message}</ErrorMessage>
-          )}
-        </FormGroup>
-
-        <FormGroup>
-          <Label htmlFor="state">State *</Label>
-          <Controller
-            name="state"
-            control={control}
-            rules={FORM_VALIDATION_RULES.state}
-            render={({ field }) => (
-              <Select
-                {...field}
-                id="state"
-                options={stateOptions}
-                $hasError={!!errors.state}
-                aria-invalid={!!errors.state}
-                isClearable
-                isSearchable
-                placeholder="Select State"
-                noOptionsMessage={() => "No state found"}
-              />
-            )}
-          />
-          {errors.state && (
-            <ErrorMessage role="alert">{errors.state.message}</ErrorMessage>
-          )}
-        </FormGroup>
-
-        {submitStatus && (
-          <StatusMessage role="alert" $type={submitStatus}>
-            {submitStatus === "success"
-              ? "Contact details saved successfully!"
-              : "An error occurred while saving contact details. Please try again."}
-          </StatusMessage>
+        {!isEditing ? (
+          <Grid>{contactFormFields.map(renderField)}</Grid>
+        ) : (
+          <Modal>
+            <ModalContent>
+              <Title>Edit Contact Details</Title>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                {contactFormFields.map(renderFormField)}
+                <ButtonGroup>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Changes</Button>
+                </ButtonGroup>
+              </Form>
+            </ModalContent>
+          </Modal>
         )}
-
-        <SubmitButton
-          type="submit"
-          disabled={isSubmitting}
-          aria-disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving Changes..." : "Save Changes"}
-        </SubmitButton>
-
-        {lastSuccessfulSubmission && (
-          <LastSaved>
-            Last saved: {new Date(lastSuccessfulSubmission).toLocaleString()}
-          </LastSaved>
-        )}
-      </FormContainer>
-    </FormWrapper>
+      </Card>
+    </Container>
   );
 };
 

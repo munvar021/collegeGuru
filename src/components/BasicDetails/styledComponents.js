@@ -1,167 +1,245 @@
 import styled from "styled-components";
 
-export const FormWrapper = styled.div`
-  padding: 2rem;
+const theme = {
+  primary: "#1a237e",
+  secondary: "#f5f5f5",
+  error: "#d32f2f",
+  border: "#ddd",
+  text: {
+    primary: "#333",
+    secondary: "#666",
+    light: "#999",
+  },
+  background: {
+    main: "#fff",
+    overlay: "rgba(0, 0, 0, 0.5)",
+  },
+};
+
+export const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 16px;
   }
 `;
 
-export const FormContainer = styled.form`
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
-
-  &:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
+export const Card = styled.div`
+  background: ${theme.background.main};
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin: 10px 0;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 16px;
+    margin: 16px 0;
   }
 `;
 
-export const FormTitle = styled.h2`
-  font-size: 1.25rem;
+export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid ${theme.border};
+`;
+
+export const Title = styled.h2`
+  color: ${theme.primary};
+  margin: 0;
+  font-size: 24px;
   font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #e2e8f0;
 
-  @media (min-width: 768px) {
-    text-align: left;
+  @media (max-width: 768px) {
+    font-size: 20px;
   }
 `;
 
-export const FormGrid = styled.div`
+export const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
+`;
+
+export const Field = styled.div`
+  margin-bottom: 16px;
+`;
+
+export const Label = styled.div`
+  color: ${theme.text.secondary};
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+`;
+
+export const Value = styled.div`
+  color: ${theme.text.primary};
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${theme.background.overlay};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+export const ModalContent = styled.div`
+  background: ${theme.background.main};
+  padding: 32px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    width: 95%;
+  }
+`;
+
+export const Form = styled.form`
+  display: grid;
+  gap: 20px;
 `;
 
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  position: relative;
-`;
-
-export const Label = styled.label`
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.25rem;
+  gap: 8px;
 `;
 
 export const Input = styled.input`
-  padding: 0.75rem;
-  border: 1px solid ${(props) => (props.$hasError ? "#ef4444" : "#e5e7eb")};
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  padding: 8px 12px;
+  border: 1px solid ${theme.border};
+  border-radius: 4px;
+  font-size: 16px;
   width: 100%;
-  background-color: #ffffff;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#2563eb")};
-    box-shadow: 0 0 0 3px
-      ${(props) =>
-        props.$hasError ? "rgba(239, 68, 68, 0.2)" : "rgba(37, 99, 235, 0.2)"};
-  }
-
-  &::placeholder {
-    color: #9ca3af;
+    border-color: ${theme.primary};
   }
 `;
 
-export const Select = styled.select`
-  padding: 0.75rem;
-  border: 1px solid ${(props) => (props.$hasError ? "#ef4444" : "#e5e7eb")};
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  width: 100%;
-  background-color: #ffffff;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  cursor: pointer;
+export const Error = styled.span`
+  color: ${theme.error};
+  font-size: 12px;
+  margin-top: 4px;
+`;
 
-  &:focus {
-    outline: none;
-    border-color: ${(props) => (props.$hasError ? "#ef4444" : "#2563eb")};
-    box-shadow: 0 0 0 3px
-      ${(props) =>
-        props.$hasError ? "rgba(239, 68, 68, 0.2)" : "rgba(37, 99, 235, 0.2)"};
-  }
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
 
-  &:disabled {
-    background-color: #f3f4f6;
-    cursor: not-allowed;
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
 `;
 
-export const ErrorText = styled.span`
-  color: #ef4444;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-`;
-
-export const SubmitButton = styled.button`
-  padding: 0.75rem 1.5rem;
-  margin-top: 2rem;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+export const Button = styled.button`
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  width: 100%;
+  border: none;
+  background: ${(props) =>
+    props.variant === "secondary" ? theme.secondary : theme.primary};
+  color: ${(props) =>
+    props.variant === "secondary" ? theme.text.primary : "#fff"};
+  min-width: 100px;
 
   &:hover {
-    background-color: #1d4ed8;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    opacity: 0.9;
   }
 
-  &:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
-  }
-
-  @media (min-width: 768px) {
-    width: auto;
-    align-self: flex-start;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 16px;
   }
 `;
 
-export const StatusMessage = styled.div`
-  margin-top: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+export const EditButton = styled(Button)`
+  padding: 8px;
+  min-width: unset;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &.success {
-    background-color: #ecfdf5;
-    color: #059669;
+  svg {
+    width: 18px;
+    height: 18px;
   }
 
-  &.error {
-    background-color: #fef2f2;
-    color: #dc2626;
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+`;
+
+export const SelectWrapper = styled.div`
+  .react-select__control {
+    border: 1px solid ${theme.border};
+    min-height: 38px;
+
+    &:hover {
+      border-color: ${theme.primary};
+    }
+
+    &--is-focused {
+      border-color: ${theme.primary};
+      box-shadow: none;
+    }
+  }
+
+  .react-select__menu {
+    z-index: 1100;
+  }
+
+  .react-select__option--is-selected {
+    background-color: ${theme.primary};
+  }
+
+  .react-select__option--is-focused {
+    background-color: rgba(26, 35, 126, 0.1);
+  }
+
+  .react-select__placeholder {
+    color: ${theme.text.light};
   }
 `;

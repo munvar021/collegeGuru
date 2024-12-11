@@ -1,55 +1,85 @@
-export const GENDER_OPTIONS = [
-  { value: "", label: "Select Gender" },
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "other", label: "Other" },
+export const formFields = [
+  {
+    id: "fullName",
+    label: "Full Name",
+    type: "text",
+    required: true,
+    defaultValue: "User",
+    validation: {
+      required: "Full name is required",
+      pattern: {
+        value: /^[a-zA-Z\s]*$/,
+        message: "Please enter valid name",
+      },
+    },
+  },
+  {
+    id: "dob",
+    label: "DOB",
+    type: "date",
+    required: true,
+    defaultValue: "",
+    validation: {
+      required: "Date of birth is required",
+    },
+  },
+  {
+    id: "socialCategory",
+    label: "Social Category",
+    type: "select",
+    required: true,
+    defaultValue: "",
+    options: [
+      { value: "general", label: "General" },
+      { value: "obc", label: "OBC" },
+      { value: "sc", label: "SC" },
+      { value: "st", label: "ST" },
+    ],
+    validation: {
+      required: "Social category is required",
+    },
+  },
+  {
+    id: "gender",
+    label: "Gender",
+    type: "select",
+    required: true,
+    defaultValue: "",
+    options: [
+      { value: "male", label: "Male" },
+      { value: "female", label: "Female" },
+      { value: "other", label: "Other" },
+    ],
+    validation: {
+      required: "Gender is required",
+    },
+  },
+  {
+    id: "maritalStatus",
+    label: "Marital Status",
+    type: "select",
+    required: true,
+    defaultValue: "",
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" },
+    ],
+    validation: {
+      required: "Marital status is required",
+    },
+  },
+  {
+    id: "physicallyChallengeded",
+    label: "Physically Challenged?",
+    type: "select",
+    required: true,
+    defaultValue: "NO",
+    options: [
+      { value: "YES", label: "Yes" },
+      { value: "NO", label: "No" },
+    ],
+    validation: {
+      required: "This field is required",
+    },
+  },
 ];
-
-export const SOCIAL_CATEGORY_OPTIONS = [
-  { value: "", label: "Select Category" },
-  { value: "general", label: "General" },
-  { value: "obc", label: "OBC" },
-  { value: "sc", label: "SC" },
-  { value: "st", label: "ST" },
-];
-
-export const PHYSICALLY_CHALLENGED_OPTIONS = [
-  { value: "no", label: "No" },
-  { value: "yes", label: "Yes" },
-];
-
-export const FORM_VALIDATION_RULES = {
-  name: {
-    required: "Full Name is required",
-    minLength: {
-      value: 2,
-      message: "Name must be at least 2 characters long",
-    },
-    maxLength: {
-      value: 50,
-      message: "Name cannot exceed 50 characters",
-    },
-    pattern: {
-      value: /^[a-zA-Z\s]*$/,
-      message: "Name can only contain letters and spaces",
-    },
-  },
-  email: {
-    required: "Email Address is required",
-    pattern: {
-      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      message: "Please enter a valid email address",
-    },
-  },
-  dateOfBirth: {
-    required: "Date of Birth is required",
-    validate: (value) =>
-      new Date(value) <= new Date() || "Date of birth cannot be in the future",
-  },
-  gender: {
-    required: "Gender is required",
-  },
-  socialCategory: {
-    required: "Social Category is required",
-  },
-};
